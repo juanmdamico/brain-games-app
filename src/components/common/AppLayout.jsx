@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { useApp, ACHIEVEMENTS } from '../../context/AppContext';
-import { Trophy, Settings, Music, Volume2, VolumeX, X, HelpCircle, Eye, Sun, Moon, Flame } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
+import { Trophy, Settings, Music, Volume2, VolumeX, X, Flame, Sparkles, LogIn, User } from 'lucide-react';
+import AuthModal from './AuthModal';
+import ProfileModal from './ProfileModal';
 
 const AppLayout = ({ children }) => {
     const {
@@ -13,7 +15,8 @@ const AppLayout = ({ children }) => {
         textSize, setTextSize,
         colorblindMode, setColorblindMode,
         unlockedAchievements, activeToast, setActiveToast,
-        streak, playClick
+        streak, playClick,
+        user, profile, setProfile
     } = useApp();
 
     const location = useLocation();
@@ -21,6 +24,10 @@ const AppLayout = ({ children }) => {
 
     const [showSettings, setShowSettings] = useState(false);
     const [showAchievementsModal, setShowAchievementsModal] = useState(false);
+    
+    // Auth & Profile Modals States
+    const [showAuthModal, setShowAuthModal] = useState(false);
+    const [showProfileModal, setShowProfileModal] = useState(false);
 
     const toggleSettings = () => {
         playClick();
@@ -31,6 +38,29 @@ const AppLayout = ({ children }) => {
         playClick();
         setShowAchievementsModal(!showAchievementsModal);
     };
+
+    const handleUserClick = () => {
+        playClick();
+        if (user) {
+            setShowProfileModal(true);
+        } else {
+            setShowAuthModal(true);
+        }
+    };
+
+    const handleProfileUpdate = (updatedProfile) => {
+        setProfile(updatedProfile);
+    };
+
+    const ACHIEVEMENTS = [
+        { id: 'first_win', title: 'Primera Victoria', description: 'Completa cualquier juego por primera vez.', icon: '🏆' },
+        { id: 'speedrun', title: 'Velocista', description: 'Completa cualquier juego en menos de 60 segundos.', icon: '⚡' },
+        { id: 'master', title: 'Mente Maestra', description: 'Completa un juego en dificultad máxima.', icon: '🧠' },
+        { id: 'polyglot', title: 'Políglota del Pensamiento', description: 'Completa 5 tipos de juegos diferentes.', icon: '🎨' },
+        { id: 'streak_3', title: 'Constancia Mental', description: 'Alcanza una racha diaria de 3 días.', icon: '🔥' },
+        { id: 'snake_50', title: 'Rey de las Serpientes', description: 'Consigue una puntuación de 50 o más en Snake.', icon: '🐍' },
+        { id: 'simon_10', title: 'Memoria Prodigiosa', description: 'Completa una secuencia de 10 colores en Simon Says.', icon: '🔴' }
+    ];
 
     return (
         <div className={`app-wrapper theme-${theme}`} style={{ 
@@ -104,6 +134,55 @@ const AppLayout = ({ children }) => {
 
                 {/* Right controls */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {/* User profile section */}
+                    {user ? (
+                        <button
+                            onClick={handleUserClick}
+                            style={{
+                                background: 'rgba(255,255,255,0.05)',
+                                border: '1px solid var(--border)',
+                                borderRadius: '10px',
+                                padding: '8px 12px',
+                                color: 'var(--text-main)',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                fontSize: '0.85rem',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            <span style={{ fontSize: '1.2rem' }}>{profile?.avatar_url || '🧠'}</span>
+                            <span className="layout-username" style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {profile?.display_name || 'Perfil'}
+                            </span>
+                            <span style={{ fontSize: '0.75rem', backgroundColor: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', padding: '2px 6px', borderRadius: '6px' }}>
+                                Nivel {profile?.level || 1}
+                            </span>
+                        </button>
+                    ) : (
+                        <button
+                            onClick={handleUserClick}
+                            style={{
+                                background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
+                                border: 'none',
+                                borderRadius: '10px',
+                                padding: '8px 12px',
+                                color: 'white',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                fontSize: '0.85rem',
+                                fontWeight: 'bold',
+                                boxShadow: '0 4px 10px rgba(59, 130, 246, 0.15)'
+                            }}
+                        >
+                            <LogIn size={16} />
+                            <span className="layout-login-text">Iniciar Sesión</span>
+                        </button>
+                    )}
+
                     <button 
                         onClick={toggleAchievements}
                         style={{
@@ -395,6 +474,16 @@ const AppLayout = ({ children }) => {
                 </div>
             )}
 
+            {/* Auth & Profile Modals */}
+            <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+            <ProfileModal 
+                isOpen={showProfileModal} 
+                onClose={() => setShowProfileModal(false)}
+                user={user}
+                profile={profile}
+                onProfileUpdate={handleProfileUpdate}
+            />
+
             {/* Global Keyframes Styles */}
             <style>{`
                 @keyframes slideDown {
@@ -465,13 +554,21 @@ const AppLayout = ({ children }) => {
                 .a11y-text-large h2 { font-size: 2.1rem !important; }
                 .a11y-text-large p { font-size: 1.2rem !important; }
                 
-                /* Apply theme classes globally to body children or main wrapper tags */
                 .theme-zen .global-header { background: rgba(240, 237, 229, 0.9) !important; }
                 .theme-neon .global-header { background: rgba(5, 5, 5, 0.95) !important; border-bottom: 2px solid #00f0ff !important; }
                 .theme-ocean .global-header { background: rgba(7, 34, 59, 0.9) !important; }
                 
                 .theme-zen button, .theme-zen select, .theme-zen select option { color: #2b2621 !important; }
                 .theme-neon .modal-container { box-shadow: 0 0 50px rgba(0, 240, 255, 0.2) !important; border: 2px solid #00f0ff !important; }
+                
+                @media (max-width: 520px) {
+                    .layout-username {
+                        display: none !important;
+                    }
+                    .layout-login-text {
+                        display: none !important;
+                    }
+                }
             `}</style>
         </div>
     );

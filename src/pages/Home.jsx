@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GameCard from '../components/common/GameCard';
 import { useApp } from '../context/AppContext';
-import { Trophy, Play, CheckCircle2, ListFilter, Award, Flame, Calendar, Sparkles } from 'lucide-react';
+import { supabase } from '../utils/supabaseClient';
+import { Trophy, Play, CheckCircle2, ListFilter, Award, Flame, Calendar, Sparkles, Users, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const GAMES = [
@@ -21,8 +22,10 @@ const GAMES = [
 ];
 
 const Home = () => {
-  const { dailyChallenge, streak, playClick, unlockedAchievements, records } = useApp();
+  const { dailyChallenge, streak, playClick, unlockedAchievements, records, user } = useApp();
   const [filter, setFilter] = useState('all');
+  const [topPlayers, setTopPlayers] = useState([]);
+  const [recentWins, setRecentWins] = useState([]);
 
   const filteredGames = GAMES.filter(g => filter === 'all' || g.category === filter);
 
@@ -33,6 +36,60 @@ const Home = () => {
     const s = totalSeconds % 60;
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
+
+  // Fetch Global Ranking and Recent Wins
+  useEffect(() => {
+    const fetchCloudStats = async () => {
+        try {
+            // 1. Fetch Top 5 Players by XP
+            const { data: topData, error: topErr } = await supabase
+                .from('profiles')
+                .select('display_name, avatar_url, xp, level')
+                .order('xp', { ascending: false })
+                .limit(5);
+            
+            if (topErr) throw topErr;
+            if (topData && topData.length > 0) {
+                setTopPlayers(topData);
+            } else {
+                setTopPlayers(getMockPlayers());
+            }
+
+            // 2. Fetch 5 Recent Wins
+            const { data: recentData, error: recentErr } = await supabase
+                .from('stats')
+                .select('game_id, difficulty, time_seconds, created_at, profiles(display_name, avatar_url)')
+                .order('created_at', { ascending: false })
+                .limit(5);
+
+            if (recentErr) throw recentErr;
+            if (recentData) {
+                setRecentWins(recentData);
+            }
+
+        } catch (e) {
+            console.warn("Supabase fetch failed, falling back to mock leaderboard:", e.message);
+            setTopPlayers(getMockPlayers());
+            setRecentWins(getMockRecentWins());
+        }
+    };
+
+    fetchCloudStats();
+  }, [user]);
+
+  const getMockPlayers = () => [
+      { display_name: 'Einstein99', avatar_url: '🚀', xp: 1200, level: 7 },
+      { display_name: 'MenteMaestra', avatar_url: '🧠', xp: 850, level: 5 },
+      { display_name: 'ReactCoder', avatar_url: '👾', xp: 540, level: 3 },
+      { display_name: 'PixelPlayer', avatar_url: '🦊', xp: 320, level: 2 },
+      { display_name: 'Invitado_123', avatar_url: '🦖', xp: 180, level: 1 }
+  ];
+
+  const getMockRecentWins = () => [
+      { game_id: 'sudoku', difficulty: 'easy', time_seconds: 94, profiles: { display_name: 'Einstein99', avatar_url: '🚀' } },
+      { game_id: 'tictactoe', difficulty: 'medium', time_seconds: 14, profiles: { display_name: 'ReactCoder', avatar_url: '👾' } },
+      { game_id: 'wordle', difficulty: 'medium', time_seconds: 78, profiles: { display_name: 'MenteMaestra', avatar_url: '🧠' } }
+  ];
 
   return (
     <div style={{ padding: '20px 24px', minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
@@ -233,6 +290,105 @@ const Home = () => {
               </div>
           </div>
 
+          {/* Real Global Leaderboards & Recent Activity */}
+          <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: '24px'
+          }}>
+              {/* Leaderboard Top Players */}
+              <div style={{
+                  backgroundColor: 'rgba(30, 41, 59, 0.55)',
+                  backdropFilter: 'blur(12px)',
+                  borderRadius: '24px',
+                  padding: '24px',
+                  border: '1.5px solid var(--border)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.15)'
+              }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                      <Users size={18} color="#fbbf24" />
+                      <span>Ranking de Cerebros (Top Jugadores)</span>
+                  </h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {topPlayers.map((player, index) => (
+                          <div 
+                              key={index} 
+                              style={{ 
+                                  display: 'flex', 
+                                  justifyContent: 'space-between', 
+                                  alignItems: 'center',
+                                  padding: '8px 12px',
+                                  borderRadius: '12px',
+                                  backgroundColor: 'rgba(255,255,255,0.02)',
+                                  border: '1px solid rgba(255,255,255,0.03)'
+                              }}
+                          >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <span style={{ fontWeight: 'bold', color: index === 0 ? '#fbbf24' : index === 1 ? '#cbd5e1' : index === 2 ? '#b45309' : 'var(--text-muted)', width: '20px' }}>
+                                      #{index + 1}
+                                  </span>
+                                  <span style={{ fontSize: '1.2rem' }}>{player.avatar_url}</span>
+                                  <span style={{ fontWeight: 'bold' }}>{player.display_name}</span>
+                              </div>
+                              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                                  <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--primary)' }}>Nivel {player.level}</span>
+                                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{player.xp} XP</span>
+                              </div>
+                          </div>
+                      ))}
+                  </div>
+              </div>
+
+              {/* Recent Wins Activity */}
+              <div style={{
+                  backgroundColor: 'rgba(30, 41, 59, 0.55)',
+                  backdropFilter: 'blur(12px)',
+                  borderRadius: '24px',
+                  padding: '24px',
+                  border: '1.5px solid var(--border)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.15)'
+              }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                      <Activity size={18} color="#10b981" />
+                      <span>Actividad Reciente (Últimas Victorias)</span>
+                  </h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {recentWins.map((win, index) => (
+                          <div 
+                              key={index} 
+                              style={{ 
+                                  display: 'flex', 
+                                  justifyContent: 'space-between', 
+                                  alignItems: 'center',
+                                  padding: '8px 12px',
+                                  borderRadius: '12px',
+                                  backgroundColor: 'rgba(255,255,255,0.02)',
+                                  border: '1px solid rgba(255,255,255,0.03)'
+                              }}
+                          >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <span style={{ fontSize: '1.2rem' }}>{win.profiles?.avatar_url || '🧠'}</span>
+                                  <div>
+                                      <div style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>{win.profiles?.display_name || 'Invitado'}</div>
+                                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                                          Resolvió <strong>{win.game_id.toUpperCase()}</strong> ({win.difficulty})
+                                      </div>
+                                  </div>
+                              </div>
+                              <span style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#10b981', fontFamily: 'monospace' }}>
+                                  {formatTime(win.time_seconds)}
+                              </span>
+                          </div>
+                      ))}
+                      {recentWins.length === 0 && (
+                          <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem', padding: '20px' }}>
+                              No hay victorias registradas todavía. ¡Sé el primero!
+                          </div>
+                      )}
+                  </div>
+              </div>
+          </div>
+
           {/* Catalog / Games Header Filter Controls */}
           <div>
               <div style={{ 
@@ -286,7 +442,6 @@ const Home = () => {
                   paddingBottom: '40px'
               }}>
                   {filteredGames.map((game, index) => {
-                      // Fetch record for this game to show personal best time
                       const gameId = game.to.replace('/', '');
                       const recordKey = `${gameId}_medium`;
                       const bestTime = records[recordKey]?.[0];
