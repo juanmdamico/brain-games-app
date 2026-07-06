@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { supabase } from '../../utils/supabaseClient';
-import { X, Lock, Mail, User, Eye, EyeOff, Sparkles, LogIn, Check } from 'lucide-react';
+import { X, Lock, User, Eye, EyeOff, LogIn, Check } from 'lucide-react';
 
 const AuthModal = ({ isOpen, onClose }) => {
     const { playClick, playSuccessSfx, playErrorSfx } = useApp();
     const [isSignUp, setIsSignUp] = useState(false);
-    const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -23,30 +22,55 @@ const AuthModal = ({ isOpen, onClose }) => {
         setErrorMsg(null);
         setSuccessMsg(null);
 
+        const cleanUsername = username.toLowerCase().trim();
+        if (cleanUsername.length < 3) {
+            playErrorSfx();
+            setErrorMsg("El usuario debe tener al menos 3 caracteres.");
+            setLoading(false);
+            return;
+        }
+
+        // Map username to local email format under the hood
+        const virtualEmail = `${cleanUsername}@divertimente.local`;
+
         try {
             if (isSignUp) {
-                // 1. Sign Up User
+                // 1. Check if username is already taken in profiles table
+                const { data: existingUser, error: checkError } = await supabase
+                    .from('profiles')
+                    .select('username')
+                    .eq('username', cleanUsername)
+                    .maybeSingle();
+
+                if (checkError) {
+                    console.error("Username check error:", checkError);
+                }
+
+                if (existingUser) {
+                    throw new Error("El nombre de usuario ya está registrado. Elige otro.");
+                }
+
+                // 2. Sign Up User
                 const { data, error } = await supabase.auth.signUp({
-                    email,
+                    email: virtualEmail,
                     password,
                     options: {
                         data: {
-                            username: username.toLowerCase().trim()
+                            username: cleanUsername
                         }
                     }
                 });
 
                 if (error) throw error;
 
-                // 2. Trigger insert into profiles table
-                // Check if profile was created by database trigger, otherwise do it manually
+                // 3. Create profile entry manually
                 if (data?.user) {
                     const { error: profileError } = await supabase
                         .from('profiles')
                         .insert([
                             {
                                 id: data.user.id,
-                                username: username.toLowerCase().trim(),
+                                username: cleanUsername,
                                 display_name: username.trim(),
                                 avatar_url: '🧠',
                                 bio: 'Entrenando mi cerebro',
@@ -56,19 +80,33 @@ const AuthModal = ({ isOpen, onClose }) => {
                             }
                         ]);
                     
-                    // If profileError is not duplicate (meaning trigger already ran), we ignore or handle
                     if (profileError && profileError.code !== '23505') {
                         console.warn("Profile creation warning:", profileError);
                     }
                 }
 
                 playSuccessSfx();
-                setSuccessMsg("¡Registro exitoso! Por favor inicia sesión.");
-                setIsSignUp(false);
+                setSuccessMsg("¡Registro exitoso! Iniciando sesión...");
+                
+                // Auto login after sign up
+                const { error: loginError } = await supabase.auth.signInWithPassword({
+                    email: virtualEmail,
+                    password
+                });
+
+                if (loginError) throw loginError;
+                
+                setTimeout(() => {
+                    onClose();
+                }, 1500);
             } else {
                 // Sign In User
+                // Check if user entered an email or a username
+                const isEmailInput = username.includes('@');
+                const loginEmail = isEmailInput ? username.trim() : virtualEmail;
+
                 const { error } = await supabase.auth.signInWithPassword({
-                    email,
+                    email: loginEmail,
                     password
                 });
 
@@ -115,7 +153,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                         {isSignUp ? 'Crear Cuenta' : 'Iniciar Sesión'}
                     </h2>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '4px' }}>
-                        {isSignUp ? 'Regístrate para guardar tu progreso en la nube.' : 'Accede a tus estadísticas y racha diaria.'}
+                        {isSignUp ? 'Elige tu nombre de usuario y contraseña para jugar.' : 'Ingresa tus credenciales para continuar.'}
                     </p>
                 </div>
 
@@ -141,32 +179,14 @@ const AuthModal = ({ isOpen, onClose }) => {
                 )}
 
                 <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    {isSignUp && (
-                        <div style={{ position: 'relative' }}>
-                            <User size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                            <input
-                                type="text"
-                                placeholder="Nombre de usuario único"
-                                required
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))}
-                                style={{
-                                    width: '100%', padding: '12px 12px 12px 40px', borderRadius: '12px',
-                                    backgroundColor: 'rgba(15, 23, 42, 0.6)', border: '1px solid var(--border)',
-                                    color: 'white', outline: 'none', fontSize: '0.9rem'
-                                }}
-                            />
-                        </div>
-                    )}
-
                     <div style={{ position: 'relative' }}>
-                        <Mail size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                        <User size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                         <input
-                            type="email"
-                            placeholder="Tu correo electrónico"
+                            type="text"
+                            placeholder={isSignUp ? "Nombre de usuario único" : "Usuario o Correo"}
                             required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_@.]/g, ''))}
                             style={{
                                 width: '100%', padding: '12px 12px 12px 40px', borderRadius: '12px',
                                 backgroundColor: 'rgba(15, 23, 42, 0.6)', border: '1px solid var(--border)',

@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { supabase } from '../../utils/supabaseClient';
-import { X, User, Edit2, LogOut, Award, Calendar, Check, Send, ShieldAlert, AwardIcon } from 'lucide-react';
+import { X, Edit2, LogOut, Send, Mail, Check, AlertCircle } from 'lucide-react';
 
 const AVATARS = ['🧠', '🚀', '👾', '🦊', '🦉', '🦁', '🦖', '🌟', '🍀', '🍕', '⚽', '🎨'];
 
 const ProfileModal = ({ isOpen, onClose, user, profile, onProfileUpdate }) => {
-    const { playClick, playSuccessSfx, playErrorSfx, records } = useApp();
+    const { playClick, playSuccessSfx, playErrorSfx } = useApp();
     const [displayName, setDisplayName] = useState(profile?.display_name || '');
     const [bio, setBio] = useState(profile?.bio || '');
     const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '🧠');
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [message, setMessage] = useState(null);
+
+    // Email link states
+    const isVirtualEmail = user?.email?.endsWith('@divertimente.local');
+    const [email, setEmail] = useState(isVirtualEmail ? '' : user?.email || '');
+    const [showEmailForm, setShowEmailForm] = useState(false);
 
     if (!isOpen) return null;
 
@@ -52,6 +57,33 @@ const ProfileModal = ({ isOpen, onClose, user, profile, onProfileUpdate }) => {
         }
     };
 
+    const handleEmailUpdate = async (e) => {
+        e.preventDefault();
+        playClick();
+        setLoading(true);
+        setMessage(null);
+
+        try {
+            const { error } = await supabase.auth.updateUser({
+                email: email.trim()
+            });
+
+            if (error) throw error;
+
+            playSuccessSfx();
+            setMessage({ 
+                type: 'success', 
+                text: 'Correo guardado. Si no desactivaste "Confirm Email" en Supabase, revisa tu casilla para confirmar el enlace.' 
+            });
+            setShowEmailForm(false);
+        } catch (error) {
+            playErrorSfx();
+            setMessage({ type: 'error', text: error.message || 'Error al actualizar el correo.' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handlePasswordReset = async () => {
         playClick();
         setLoading(true);
@@ -81,7 +113,6 @@ const ProfileModal = ({ isOpen, onClose, user, profile, onProfileUpdate }) => {
     };
 
     // Calculate level progress
-    // Each level requires 200 XP
     const currentXp = profile?.xp || 0;
     const currentLevel = profile?.level || 1;
     const xpNeededForCurrentLevel = (currentLevel - 1) * 200;
@@ -153,7 +184,6 @@ const ProfileModal = ({ isOpen, onClose, user, profile, onProfileUpdate }) => {
                         </>
                     ) : (
                         <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
-                            {/* Avatar Picker */}
                             <div style={{ marginBottom: '5px' }}>
                                 <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: 'bold' }}>Elige tu Avatar:</div>
                                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -240,7 +270,6 @@ const ProfileModal = ({ isOpen, onClose, user, profile, onProfileUpdate }) => {
                         <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-muted)' }}>Nivel {currentLevel}</span>
                         <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-main)' }}>{currentXp} XP total</span>
                     </div>
-                    {/* XP Progress bar */}
                     <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '4px', overflow: 'hidden', marginBottom: '6px' }}>
                         <div style={{ 
                             width: `${progressPercentage}%`, 
@@ -254,28 +283,99 @@ const ProfileModal = ({ isOpen, onClose, user, profile, onProfileUpdate }) => {
                     </div>
                 </div>
 
+                {/* Email Linking Section */}
+                <div style={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.25)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '16px',
+                    padding: '14px 16px',
+                    marginBottom: '20px'
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: 'var(--text-muted)' }}>Correo Vinculado</span>
+                        {isVirtualEmail && (
+                            <span style={{ fontSize: '0.75rem', color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                <AlertCircle size={12} /> Desvinculado
+                            </span>
+                        )}
+                    </div>
+
+                    {!showEmailForm ? (
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.9rem', color: isVirtualEmail ? 'var(--text-muted)' : 'var(--text-main)' }}>
+                                {isVirtualEmail ? 'Sin correo de recuperación' : user?.email}
+                            </span>
+                            <button
+                                onClick={() => { playClick(); setShowEmailForm(true); }}
+                                style={{
+                                    background: 'transparent', border: 'none', color: 'var(--primary)',
+                                    fontSize: '0.8rem', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline'
+                                }}
+                            >
+                                {isVirtualEmail ? 'Vincular' : 'Cambiar'}
+                            </button>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleEmailUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '8px' }}>
+                            <div style={{ position: 'relative' }}>
+                                <Mail size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                                <input
+                                    type="email"
+                                    required
+                                    placeholder="correo@ejemplo.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    style={{
+                                        width: '100%', padding: '8px 10px 8px 34px', borderRadius: '8px',
+                                        backgroundColor: 'rgba(15, 23, 42, 0.6)', border: '1px solid var(--border)',
+                                        color: 'white', fontSize: '0.85rem', outline: 'none'
+                                    }}
+                                />
+                            </div>
+                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                                <button
+                                    type="button"
+                                    onClick={() => { playClick(); setShowEmailForm(false); }}
+                                    style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid var(--border)', color: 'white', background: 'transparent', fontSize: '0.8rem', cursor: 'pointer' }}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    style={{ padding: '6px 12px', borderRadius: '8px', border: 'none', background: 'var(--primary)', color: 'white', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 'bold' }}
+                                >
+                                    {loading ? 'Guardando...' : 'Guardar'}
+                                </button>
+                            </div>
+                        </form>
+                    )}
+                </div>
+
                 {/* Account Settings / Actions */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <button
                         onClick={handlePasswordReset}
-                        disabled={loading}
+                        disabled={loading || isVirtualEmail}
                         style={{
                             width: '100%', padding: '12px',
-                            backgroundColor: 'rgba(255,255,255,0.03)',
+                            backgroundColor: isVirtualEmail ? 'rgba(255,255,255,0.01)' : 'rgba(255,255,255,0.03)',
                             border: '1px solid var(--border)',
                             borderRadius: '12px',
-                            color: 'var(--text-main)',
+                            color: isVirtualEmail ? 'var(--text-muted)' : 'var(--text-main)',
                             fontSize: '0.9rem',
                             fontWeight: 'bold',
-                            cursor: 'pointer',
+                            cursor: isVirtualEmail ? 'not-allowed' : 'pointer',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '8px',
+                            opacity: isVirtualEmail ? 0.4 : 1,
                             transition: 'background-color 0.2s'
                         }}
-                        onMouseOver={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'}
-                        onMouseOut={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)'}
+                        onMouseOver={e => !isVirtualEmail && (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)')}
+                        onMouseOut={e => !isVirtualEmail && (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)')}
+                        title={isVirtualEmail ? 'Debes vincular un correo electrónico primero.' : ''}
                     >
                         <Send size={16} />
                         <span>Restablecer Contraseña (Email)</span>
