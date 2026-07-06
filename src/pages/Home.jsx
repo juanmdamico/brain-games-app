@@ -21,7 +21,11 @@ const GAMES = [
     { to: "/simonsays", icon: "🎨", title: "Simon Says", category: "casual", description: "Sigue la secuencia de colores que cada vez es más larga." },
     { to: "/conecta4", icon: "🔴", title: "Conecta 4", category: "casual", description: "Alinea 4 fichas de tu color en el tablero vertical contra la Inteligencia Artificial." },
     { to: "/reflejos", icon: "⚡", title: "Test de Reflejos", category: "arcade", description: "Haz clic lo más rápido posible cuando cambie el color para medir tus milisegundos." },
-    { to: "/deslizante", icon: "🧩", title: "15 Puzzle", category: "logic", description: "Desliza las baldosas numeradas para ordenarlas del 1 al 15 en orden correlativo." }
+    { to: "/deslizante", icon: "🧩", title: "15 Puzzle", category: "logic", description: "Desliza las baldosas numeradas para ordenarlas del 1 al 15 en orden correlativo." },
+    { to: "/sopadeletras", icon: "🔠", title: "Sopa de Letras", category: "arcade", description: "Encuentra las palabras ocultas en la cuadrícula de letras en horizontal, vertical o diagonal." },
+    { to: "/ahorcado", icon: "🚀", title: "Ahorcado", category: "casual", description: "Adivina la palabra secreta letra por letra y ayuda a lanzar el cohete Divertimente." },
+    { to: "/mastermind", icon: "🔐", title: "Mastermind", category: "logic", description: "Descifra la combinación secreta de 4 colores interpretando las pistas de acierto." },
+    { to: "/sokoban", icon: "📦", title: "Sokoban", category: "logic", description: "Empuja todas las cajas del almacén hasta las posiciones indicadas sin quedarte atrapado." }
 ];
 
 const Home = () => {

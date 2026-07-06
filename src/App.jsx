@@ -17,6 +17,10 @@ import SimonSaysPage from './pages/SimonSaysPage';
 import Connect4Page from './pages/Connect4Page';
 import ReactionPage from './pages/ReactionPage';
 import SliderPage from './pages/SliderPage';
+import WordSearchPage from './pages/WordSearchPage';
+import HangmanPage from './pages/HangmanPage';
+import MastermindPage from './pages/MastermindPage';
+import SokobanPage from './pages/SokobanPage';
 import { AppProvider } from './context/AppContext';
 import AppLayout from './components/common/AppLayout';
 import './index.css';
@@ -44,6 +48,10 @@ function App() {
             <Route path="/conecta4" element={<Connect4Page />} />
             <Route path="/reflejos" element={<ReactionPage />} />
             <Route path="/deslizante" element={<SliderPage />} />
+            <Route path="/sopadeletras" element={<WordSearchPage />} />
+            <Route path="/ahorcado" element={<HangmanPage />} />
+            <Route path="/mastermind" element={<MastermindPage />} />
+            <Route path="/sokoban" element={<SokobanPage />} />
           </Routes>
         </AppLayout>
       </Router>

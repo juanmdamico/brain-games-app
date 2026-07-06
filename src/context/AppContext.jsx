@@ -30,7 +30,11 @@ const GAMES_LIST = [
     { id: 'simonsays', name: 'Simon Says', path: '/simonsays' },
     { id: 'conecta4', name: 'Conecta 4', path: '/conecta4' },
     { id: 'reflejos', name: 'Reflejos', path: '/reflejos' },
-    { id: 'deslizante', name: 'Deslizante', path: '/deslizante' }
+    { id: 'deslizante', name: 'Deslizante', path: '/deslizante' },
+    { id: 'sopadeletras', name: 'Sopa de Letras', path: '/sopadeletras' },
+    { id: 'ahorcado', name: 'Ahorcado', path: '/ahorcado' },
+    { id: 'mastermind', name: 'Mastermind', path: '/mastermind' },
+    { id: 'sokoban', name: 'Sokoban', path: '/sokoban' }
 ];
 
 export const AppProvider = ({ children }) => {
