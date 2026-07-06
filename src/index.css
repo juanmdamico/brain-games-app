@@ -1,0 +1,258 @@
+:root {
+    --bg-color: #020617; /* Slate 950 */
+    --surface-color: rgba(30, 41, 59, 0.4);
+    --surface-hover: rgba(51, 65, 85, 0.6);
+    --primary: #3b82f6;
+    --primary-glow: rgba(59, 130, 246, 0.5);
+    --secondary: #8b5cf6;
+    --secondary-color: #8b5cf6;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.1);
+    --panel-bg: rgba(30, 41, 59, 0.95);
+
+    /* Sudoku Specific */
+    --cell-bg: #1e293b;
+    --cell-border: #334155;
+    --cell-highlight: rgba(59, 130, 246, 0.15);
+    --cell-selected: rgba(59, 130, 246, 0.4);
+    --cell-error: rgba(239, 68, 68, 0.2);
+    --cell-error-text: #ef4444;
+    --cell-fixed-text: #94a3b8;
+    --cell-user-text: #60a5fa;
+    --border-thick: 2px solid #64748b;
+    --border-thin: 1px solid #334155;
+}
+
+/* Theme overrides */
+body.theme-zen {
+    --bg-color: #faf7f0;
+    --surface-color: rgba(240, 237, 229, 0.7);
+    --surface-hover: rgba(225, 220, 209, 0.9);
+    --primary: #556b2f;
+    --secondary: #cd5c5c;
+    --secondary-color: #cd5c5c;
+    --text-main: #2b2621;
+    --text-muted: #6e655f;
+    --border: rgba(85, 107, 47, 0.25);
+    --panel-bg: rgba(245, 242, 234, 0.98);
+    --cell-bg: #ffffff;
+    --cell-border: #dcd6cd;
+    --cell-user-text: #556b2f;
+    --cell-fixed-text: #8e857e;
+    --cell-selected: rgba(85, 107, 47, 0.2);
+    --cell-highlight: rgba(85, 107, 47, 0.08);
+}
+
+body.theme-neon {
+    --bg-color: #050505;
+    --surface-color: rgba(13, 13, 13, 0.85);
+    --surface-hover: rgba(25, 25, 25, 0.95);
+    --primary: #ff007f;
+    --secondary: #00f0ff;
+    --secondary-color: #00f0ff;
+    --text-main: #ffffff;
+    --text-muted: #aaaaaa;
+    --border: rgba(0, 240, 255, 0.4);
+    --panel-bg: rgba(10, 10, 10, 0.98);
+    --cell-bg: #111111;
+    --cell-border: rgba(255, 0, 127, 0.3);
+    --cell-user-text: #00f0ff;
+    --cell-fixed-text: #888888;
+    --cell-selected: rgba(0, 240, 255, 0.3);
+    --cell-highlight: rgba(255, 0, 127, 0.15);
+}
+
+body.theme-ocean {
+    --bg-color: #031525;
+    --surface-color: rgba(7, 34, 59, 0.6);
+    --surface-hover: rgba(12, 49, 82, 0.8);
+    --primary: #0ea5e9;
+    --secondary: #2dd4bf;
+    --secondary-color: #2dd4bf;
+    --text-main: #f0f9ff;
+    --text-muted: #7dd3fc;
+    --border: rgba(14, 165, 233, 0.25);
+    --panel-bg: rgba(7, 30, 52, 0.98);
+    --cell-bg: #0b253c;
+    --cell-border: #133a5c;
+    --cell-user-text: #2dd4bf;
+    --cell-fixed-text: #7dd3fc;
+    --cell-selected: rgba(14, 165, 233, 0.3);
+    --cell-highlight: rgba(45, 212, 191, 0.15);
+}
+
+/* Accessibility overrides */
+body.a11y-high-contrast {
+    --bg-color: #000000 !important;
+    --surface-color: #000000 !important;
+    --surface-hover: #111111 !important;
+    --text-main: #ffffff !important;
+    --text-muted: #f1f5f9 !important;
+    --border: #ffffff !important;
+    --panel-bg: #000000 !important;
+    --cell-bg: #000000 !important;
+    --cell-border: #ffffff !important;
+    --border-thick: 3px solid #ffffff !important;
+    --border-thin: 1px solid #ffffff !important;
+}
+
+body.a11y-text-large {
+    font-size: 1.15rem !important;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Background effects */
+.background-effects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.35;
+    animation: float 20s infinite ease-in-out;
+}
+
+.orb-1 { width: 400px; height: 400px; background: #3b82f6; top: -100px; left: -100px; }
+.orb-2 { width: 350px; height: 350px; background: #8b5cf6; bottom: -50px; right: -100px; animation-delay: -5s; }
+.orb-3 { width: 300px; height: 300px; background: #ec4899; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -10s; }
+
+body.theme-zen .glow-orb { display: none; }
+body.theme-neon .glow-orb { opacity: 0.15; filter: blur(150px); }
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-30px, 40px) scale(0.9); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* General board/cell styling */
+.cell {
+    width: 44px;
+    height: 44px;
+    background-color: var(--cell-bg);
+    border: var(--border-thin);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--cell-user-text);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    user-select: none;
+}
+
+/* Bordes gruesos para separar los bloques de 3x3 en Sudoku */
+.cell:nth-child(3n) { border-right: var(--border-thick); }
+.cell:nth-child(9n) { border-right: none; }
+.cell:nth-child(n+19):nth-child(-n+27),
+.cell:nth-child(n+46):nth-child(-n+54) { border-bottom: var(--border-thick); }
+#sudoku-board .cell:nth-last-child(-n+9) { border-bottom: none; }
+
+.cell.fixed {
+    color: var(--cell-fixed-text);
+    font-weight: 700;
+    background-color: rgba(15, 23, 42, 0.25);
+}
+
+.cell:not(.fixed):hover {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+body.theme-zen .cell.fixed {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.cell.selected {
+    background-color: var(--cell-selected) !important;
+    box-shadow: inset 0 0 4px var(--primary);
+}
+
+.cell.highlighted {
+    background-color: var(--cell-highlight);
+}
+
+.cell.error {
+    color: var(--cell-error-text);
+    background-color: var(--cell-error) !important;
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Mobile responsive scaling */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px !important;
+        border-radius: 16px !important;
+        width: 95% !important;
+        margin: 0 auto;
+    }
+    
+    header h1 {
+        font-size: 1.6rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .cell {
+        width: 34px;
+        height: 34px;
+        font-size: 1.1rem;
+    }
+    
+    /* Ensure grid scrollability or scaling */
+    .board-container {
+        overflow-x: auto;
+        padding-bottom: 10px;
+        max-width: 100%;
+        justify-content: flex-start !important;
+    }
+    
+    .numpad button {
+        padding: 10px 0 !important;
+        font-size: 1rem !important;
+    }
+}

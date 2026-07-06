@@ -1,0 +1,61 @@
+# Lista Exhaustiva de Posibles Juegos Futuros
+
+Esta es una recopilación extensa de todos los juegos clásicos de ingenio, rompecabezas, destreza y lógica que podríamos implementar en el futuro en la plataforma. 
+
+*(Nota: Se han excluido los 13 juegos actuales: Sudoku, Buscaminas, 2048, Nonogramas, Kakuro, KenKen, Hitori, Slitherlink, Wordle, Memory Match, Snake, Tres en Línea y Simon Says).*
+
+## 1. Rompecabezas Numéricos y Lógicos de Grilla
+- **Killer Sudoku**: Variante de Sudoku donde, además de las reglas clásicas, hay "jaulas" de celdas cuya suma debe dar un número específico.
+- **Futoshiki**: Cuadrícula con desigualdades (mayor que/menor que) entre celdas adyacentes.
+- **Nurikabe**: Formar "islas" de casillas blancas del tamaño indicado por los números, rodeadas de un "río" negro continuo.
+- **Hashiwokakero (Hashi / Puentes)**: Conectar islas numeradas con la cantidad exacta de puentes indicados, sin que los puentes se crucen.
+- **Kuromasu**: Descubrir dónde van las casillas negras basándose en el "rango de visión" numérico de las celdas blancas.
+- **Shikaku**: Dividir la cuadrícula en rectángulos, de forma que cada uno contenga exactamente un número, y ese número represente su área.
+- **Akari (Light Up)**: Colocar bombillas en una cuadrícula para iluminar todos los pasillos blancos sin que dos bombillas se iluminen entre sí.
+- **Masyu**: Trazar un único lazo cerrado que pase por círculos blancos y negros bajo reglas estrictas de giros.
+- **Star Battle**: Colocar 1 o 2 estrellas en cada fila, columna y región sin que se toquen (ni en diagonal).
+- **Yin-Yang**: Llenar la cuadrícula con círculos blancos y negros de forma que todos los del mismo color formen una figura contigua sin formar bloques 2x2.
+
+## 2. Juegos de Palabras e Idiomas
+- **Sopa de Letras (Word Search)**: Encontrar palabras ocultas en una cuadrícula de letras en diversas direcciones.
+- **Crucigramas (Crosswords)**: Clásico juego de rellenar palabras cruzadas a partir de pistas descriptivas.
+- **Anagramas (Text Twist)**: Formar tantas palabras válidas como sea posible a partir de un conjunto de 6 o 7 letras desordenadas.
+- **Ahorcado (Hangman)**: Adivinar una palabra letra por letra antes de que se complete el dibujo del muñeco.
+- **Spelling Bee**: Formar palabras hexagonales que obligatoriamente deben incluir la letra central.
+- **Typing Test / Velocidad de Mecanografía**: Escribir un texto lo más rápido posible sin cometer errores para medir las Palabras Por Minuto (WPM).
+
+## 3. Juegos de Tablero Clásicos y Estrategia
+- **Ajedrez**: El rey de la estrategia. Se puede jugar contra la IA o resolver "problemas/puzzles de ajedrez" (Mate en 1, Mate en 2).
+- **Damas (Checkers)**: Clásico juego de capturar las piezas del rival.
+- **Reversi (Othello)**: Rodear las fichas del oponente para voltearlas a tu color.
+- **Conecta 4 (Connect Four)**: Dejar caer fichas en una rejilla vertical para alinear 4 del mismo color antes que el oponente.
+- **Gomoku / Cinco en línea**: Similar al tres en línea, pero en un tablero mucho más grande (15x15) donde el objetivo es alinear 5 fichas.
+- **Batalla Naval (Battleship)**: Adivinar en qué coordenadas de la cuadrícula el oponente (IA) ha escondido sus barcos.
+- **Mahjong Solitaire**: Emparejar y remover fichas idénticas libres en una disposición tridimensional piramidal.
+- **Mastermind (Descifrador de Códigos)**: Adivinar una secuencia oculta de 4 colores, recibiendo pistas de cuántos colores y posiciones están correctos.
+
+## 4. Juegos de Cartas y Solitarios
+- **Solitario Klondike**: El solitario clásico de Windows de mover cartas alternando colores.
+- **Solitario Spider**: Ordenar 2 o 4 palos del Rey al As en un tablero complejo.
+- **Carta Blanca (FreeCell)**: Variante estratégica del solitario donde todas las cartas están boca arriba desde el principio.
+- **Blackjack (21)**: Juego de casino contra el "Croupier" para sumar exactamente 21 sin pasarse.
+- **Póker en solitario (Video Poker)**: Armar la mejor mano de 5 cartas de Póker con un solo descarte.
+
+## 5. Juegos de Puzzle Espaciales y Físicos
+- **Sokoban**: Mover a un trabajador de almacén en un laberinto para empujar cajas hasta sus lugares de destino (sin atraparte a ti mismo).
+- **Rompecabezas Deslizante (15 Puzzle)**: Ordenar baldosas numeradas del 1 al 15 en un tablero 4x4 moviéndolas hacia el único hueco vacío.
+- **Bloques (Block Puzzle / Tetris-like)**: Acomodar piezas de formas variadas en una cuadrícula (estilo Wood Block Puzzle) para despejar líneas.
+- **Rush Hour (Atasco)**: Sacar un coche rojo del tablero deslizando los demás vehículos que bloquean el camino.
+- **Tuberías (Pipe Mania / Plumber)**: Rotar trozos de tubería en la cuadrícula para conectar una fuente de agua con un desagüe sin fugas.
+- **Flujo (Flow Free)**: Conectar puntos de colores a través de un tablero asegurándote de que los caminos no se crucen.
+
+## 6. Arcade, Reflejos y Memoria Extendida
+- **Tetris**: Mover y rotar tetrominós que caen para completar y despejar líneas horizontales.
+- **Pac-Man (Laberinto)**: Comer puntos en un laberinto evitando ser alcanzado por fantasmas.
+- **Breakout / Arkanoid**: Controlar una barra inferior para rebotar una pelota y destruir todos los ladrillos superiores.
+- **Whack-a-Mole (Golpea al Topo)**: Hacer clic rápidamente en objetivos que aparecen y desaparecen de la pantalla aleatoriamente.
+- **Reaction Time Test (Reflejos)**: Un panel que cambia de color y debes hacer clic en la menor cantidad de milisegundos posibles.
+- **Buscador de Pares Auditivos**: Una variante de "Memory Match" pero basada completamente en escuchar sonidos musicales o efectos en lugar de ver imágenes.
+
+## 7. Juegos Incrementales (Clickers / Idle)
+- **Clicker Matemático / "Brain Clicker"**: Un juego pasivo donde el usuario hace clics para ganar "Neuronas" o "IQ" y comprar mejoras automáticas que suben su puntaje por segundo mientras deja la ventana abierta, excelente para relajarse entre rompecabezas difíciles.

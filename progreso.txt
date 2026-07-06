@@ -1,0 +1,49 @@
+# Estado del Proyecto: Juegos para Pensar (Brain Games App)
+
+**Contexto para el Asistente de IA:**
+Este documento resume el progreso completo del desarrollo de una aplicación web de juegos mentales creada con React y Vite. Utiliza esta información como contexto para saber exactamente en qué punto se encuentra el proyecto y poder continuar el trabajo sin interrupciones.
+
+## 1. Arquitectura y Tecnologías
+- **Frontend**: React.js (inicializado con Vite).
+- **Enrutamiento**: `react-router-dom` para la navegación entre el menú principal (`Home.jsx`) y las páginas de cada juego.
+- **Estilos**: CSS puro (Vanilla CSS) enfocado en un diseño moderno, temas oscuros ("dark mode"), efectos de desenfoque (glassmorphism) y animaciones sutiles.
+- **Dependencias extra**: `lucide-react` para iconos, `canvas-confetti` para las celebraciones de victoria.
+
+## 2. Componentes Comunes (UX Polish)
+Se ha creado un estándar de interfaz (UX) que comparten absolutamente todos los juegos de la plataforma. Estos componentes se encuentran en `src/components/common/`:
+- **`GameCard.jsx`**: Tarjetas de presentación para el menú principal.
+- **`Timer.jsx`**: Temporizador que arranca al iniciar el juego y se detiene al ganar o perder.
+- **`InstructionsModal.jsx`**: Modal que se abre con el botón de ayuda `(?)` en la cabecera para explicar las reglas.
+- **`VictoryModal.jsx`**: Modal que aparece al ganar, mostrando el tiempo empleado y disparando confeti.
+- **`GameControls.jsx`**: Botonera inferior que estandariza la selección de dificultad (Fácil, Medio, Difícil) y botones de acción (Nuevo Juego, Comprobar, etc.).
+
+## 3. Catálogo de Juegos (13 en total)
+El proyecto cuenta actualmente con 13 juegos totalmente funcionales e integrados con los componentes UX mencionados arriba.
+
+### Juegos de Lógica Matemática y Grillas (Originales)
+1. **Sudoku** (`SudokuPage.jsx`, `sudokuLogic.js`)
+2. **Buscaminas** (`MinesweeperPage.jsx`, `minesweeperLogic.js`)
+3. **2048** (`Game2048Page.jsx`, `game2048Logic.js`)
+4. **Nonogramas** (`NonogramPage.jsx`, `nonogramLogic.js`)
+5. **Kakuro** (`KakuroPage.jsx`, `kakuroLogic.js`)
+6. **KenKen** (`KenKenPage.jsx`, `kenkenLogic.js`)
+7. **Hitori** (`HitoriPage.jsx`, `hitoriLogic.js`)
+8. **Slitherlink** (`SlitherlinkPage.jsx`, `slitherlinkLogic.js`)
+
+### Juegos Añadidos Recientemente (Palabras, Memoria, Arcade)
+9. **Wordle** (`WordlePage.jsx`, `wordleLogic.js`): Con teclado virtual interactivo.
+10. **Memory Match** (`MemoryMatchPage.jsx`, `memoryLogic.js`): Emparejar cartas de emojis.
+11. **Snake** (`SnakePage.jsx`, `snakeLogic.js`): Arcade clásico con colisiones y puntuación.
+12. **Tres en línea** (`TicTacToePage.jsx`, `tictactoeLogic.js`): JcE (Jugador contra Entorno) con algoritmo básico de IA.
+13. **Simon Says** (`SimonSaysPage.jsx`, `simonLogic.js`): Juego de repetir secuencias de colores.
+
+## 4. Ideas Discutidas para el Futuro (Siguientes Pasos)
+El usuario y el asistente anterior han discutido las siguientes posibles vías de desarrollo para retomar el proyecto:
+
+1. **Persistencia de Datos (Guardado de partidas)**:
+   - *Fase 1 (Local)*: Implementar `localStorage` para que si el usuario recarga la página o la cierra por accidente, el tablero y el temporizador no se pierdan.
+   - *Fase 2 (Backend)*: Implementar un sistema de autenticación (ej. Firebase o Supabase) para registrar usuarios, guardar su progreso en la nube, llevar estadísticas personales y crear tablas de clasificación (leaderboards).
+2. **Mejora del Menú Principal (`Home.jsx`)**: Al haber crecido a 13 juegos, se sugirió implementar un sistema de pestañas o botones de filtrado (Ej: "Todos", "Lógica", "Arcade", "Memoria") para organizar las tarjetas de los juegos.
+3. **Más Juegos**: Existe un archivo en el directorio raíz llamado `lista potencial.txt` con decenas de ideas para futuros juegos organizadas por categorías.
+
+**Instrucción para el asistente:** Pregúntale al usuario por cuál de los "Siguientes Pasos" (Persistencia, Filtros en el Menú, o Añadir más juegos de la lista) desea continuar ahora que está en casa.

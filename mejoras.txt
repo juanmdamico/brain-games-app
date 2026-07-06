@@ -1,0 +1,36 @@
+# Hoja de Ruta: Mejoras y Funcionalidades Futuras
+
+Esta lista contiene ideas de funcionalidades para expandir la plataforma "Juegos para Pensar" más allá de la adición de nuevos juegos.
+
+## 1. Retos Diarios y Rachas (Daily Challenges)
+- Implementar un "Sudoku del Día" o "Wordle del Día" que sea igual para todos los usuarios.
+- Llevar un contador de "Rachas" (Streaks) para premiar la constancia de los usuarios que entran a entrenar su mente varios días seguidos.
+
+## 2. Sistema de Logros y Medallas (Achievements)
+- Desbloquear medallas virtuales en el perfil del jugador.
+- Ejemplos: "Velocista" (Resuelve en < 1 minuto), "Mente Maestra" (Gana 10 partidas en modo Imposible), o "Políglota" (Gana un juego de cada categoría).
+
+## 3. Pistas Inteligentes (Smart Hints)
+- En juegos lógicos (Kakuro, Slitherlink, etc.), implementar un botón de "Pista".
+- En lugar de resolver el tablero de golpe, la pista resalta una celda y explica la deducción lógica necesaria, ayudando a aprender técnicas avanzadas.
+
+## 4. Personalización y Temas (Themes)
+- Tienda o configuración de temas visuales para la aplicación.
+- Ejemplos: Tema "Zen" (claro/minimalista), Tema "Arcade Retro" (neón/píxeles), Tema "Océano" (tonos azules suaves).
+
+## 5. Sonido Ambiental y Efectos (Audio)
+- Música de fondo relajante (tipo Lo-Fi) para ayudar a la concentración.
+- Efectos de sonido satisfactorios al interactuar con el juego (aciertos, errores, voltear cartas).
+- Incluir siempre controles globales para mutear/ajustar volumen.
+
+## 6. Progressive Web App (PWA) / Modo Offline
+- Configurar la aplicación web para ser instalable en dispositivos móviles y de escritorio.
+- Permitir jugar offline (sin conexión a internet) cargando los recursos desde la caché del dispositivo.
+
+## 7. Modos Multijugador o "Carreras"
+- Modos cooperativos o competitivos (Ej: dos personas resolviendo el mismo tablero a la vez, viendo el progreso del rival).
+- Tablas de clasificación (Leaderboards) globales por tiempo y dificultad.
+
+## 8. Accesibilidad (A11y)
+- Modos para daltónicos (cambiar paletas de colores en Wordle o Simon Says por patrones o símbolos).
+- Modos de alto contraste y fuentes más grandes para personas con dificultades visuales.
