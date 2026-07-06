@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Trigger rebuild to compile newly saved VITE_ variables
+// Trigger rebuild with corrected VITE_ variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
