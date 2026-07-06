@@ -27,7 +27,10 @@ const GAMES_LIST = [
     { id: 'memorymatch', name: 'Memory Match', path: '/memorymatch' },
     { id: 'snake', name: 'Snake', path: '/snake' },
     { id: 'tictactoe', name: 'Tres en línea', path: '/tictactoe' },
-    { id: 'simonsays', name: 'Simon Says', path: '/simonsays' }
+    { id: 'simonsays', name: 'Simon Says', path: '/simonsays' },
+    { id: 'conecta4', name: 'Conecta 4', path: '/conecta4' },
+    { id: 'reflejos', name: 'Reflejos', path: '/reflejos' },
+    { id: 'deslizante', name: 'Deslizante', path: '/deslizante' }
 ];
 
 export const AppProvider = ({ children }) => {

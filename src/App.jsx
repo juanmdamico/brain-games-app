@@ -14,6 +14,9 @@ import MemoryMatchPage from './pages/MemoryMatchPage';
 import SnakePage from './pages/SnakePage';
 import TicTacToePage from './pages/TicTacToePage';
 import SimonSaysPage from './pages/SimonSaysPage';
+import Connect4Page from './pages/Connect4Page';
+import ReactionPage from './pages/ReactionPage';
+import SliderPage from './pages/SliderPage';
 import { AppProvider } from './context/AppContext';
 import AppLayout from './components/common/AppLayout';
 import './index.css';
@@ -38,6 +41,9 @@ function App() {
             <Route path="/snake" element={<SnakePage />} />
             <Route path="/tictactoe" element={<TicTacToePage />} />
             <Route path="/simonsays" element={<SimonSaysPage />} />
+            <Route path="/conecta4" element={<Connect4Page />} />
+            <Route path="/reflejos" element={<ReactionPage />} />
+            <Route path="/deslizante" element={<SliderPage />} />
           </Routes>
         </AppLayout>
       </Router>

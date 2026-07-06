@@ -18,7 +18,10 @@ const GAMES = [
     { to: "/memorymatch", icon: "🎴", title: "Memory Match", category: "casual", description: "Encuentra los pares de cartas iguales para entrenar tu memoria." },
     { to: "/snake", icon: "🐍", title: "Snake", category: "arcade", description: "El clásico juego arcade. Come y crece sin chocar." },
     { to: "/tictactoe", icon: "❌", title: "Tres en línea", category: "casual", description: "Juego de mesa clásico. Alinea 3 de tus símbolos para ganar." },
-    { to: "/simonsays", icon: "🎨", title: "Simon Says", category: "casual", description: "Sigue la secuencia de colores que cada vez es más larga." }
+    { to: "/simonsays", icon: "🎨", title: "Simon Says", category: "casual", description: "Sigue la secuencia de colores que cada vez es más larga." },
+    { to: "/conecta4", icon: "🔴", title: "Conecta 4", category: "casual", description: "Alinea 4 fichas de tu color en el tablero vertical contra la Inteligencia Artificial." },
+    { to: "/reflejos", icon: "⚡", title: "Test de Reflejos", category: "arcade", description: "Haz clic lo más rápido posible cuando cambie el color para medir tus milisegundos." },
+    { to: "/deslizante", icon: "🧩", title: "15 Puzzle", category: "logic", description: "Desliza las baldosas numeradas para ordenarlas del 1 al 15 en orden correlativo." }
 ];
 
 const Home = () => {
