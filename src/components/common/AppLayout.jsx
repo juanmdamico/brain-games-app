@@ -81,7 +81,7 @@ const AppLayout = ({ children }) => {
                         WebkitTextFillColor: 'transparent',
                         display: isHome ? 'block' : 'none'
                     }}>
-                        🧠 Brain Games
+                        🧠 Divertimente
                     </span>
                     {streak > 0 && (
                         <div style={{ 

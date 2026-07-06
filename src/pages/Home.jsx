@@ -45,7 +45,7 @@ const Home = () => {
       {/* Header */}
       <header style={{ textAlign: 'center', marginBottom: '40px', marginTop: '30px' }}>
         <h1 style={{ fontWeight: 900, fontSize: '3.6rem', marginBottom: '10px', background: 'linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-1px' }}>
-            Juegos para Pensar
+            Divertimente
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '650px', margin: '0 auto', lineHeight: 1.6 }}>
             Desafía tu mente todos los días. Ejercita la lógica, la memoria, la concentración y la agilidad mental.
@@ -325,7 +325,7 @@ const Home = () => {
 
       {/* Footer */}
       <footer style={{ textAlign: 'center', padding: '40px 20px', marginTop: '40px', color: 'var(--text-muted)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <p>© {new Date().getFullYear()} Juegos para Pensar. Entrena tu mente todos los días.</p>
+          <p>© {new Date().getFullYear()} Divertimente. Entrena tu mente todos los días.</p>
       </footer>
 
       {/* Global CSS for filters and layout responsive overrides */}

@@ -1,6 +1,6 @@
 {
-  "name": "Juegos para Pensar",
-  "short_name": "Brain Games",
+  "name": "Divertimente",
+  "short_name": "Divertimente",
   "description": "Desafía tu mente con una colección de 13 juegos lógicos, matemáticos y arcade.",
   "start_url": "/",
   "display": "standalone",
