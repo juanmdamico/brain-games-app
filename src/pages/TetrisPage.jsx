@@ -30,6 +30,7 @@ const TetrisPage = () => {
     const { playClick, playSuccessSfx, playErrorSfx, playVictorySfx, registerGameCompletion } = useApp();
     const [grid, setGrid] = useState(Array(ROWS).fill(null).map(() => Array(COLS).fill(null)));
     const [currentPiece, setCurrentPiece] = useState(null);
+    const [nextPiece, setNextPiece] = useState(null);
     const [currentPosition, setCurrentPosition] = useState({ r: 0, c: 3 });
     const [score, setScore] = useState(0);
     const [linesCleared, setLinesCleared] = useState(0);
@@ -93,18 +94,31 @@ const TetrisPage = () => {
         setShowVictory(false);
         setTimeElapsed(0);
         startTimeRef.current = Date.now();
-        spawnPiece();
+
+        // Generate first two pieces
+        const keys = Object.keys(SHAPES);
+        const t1 = keys[Math.floor(Math.random() * keys.length)];
+        const t2 = keys[Math.floor(Math.random() * keys.length)];
+        
+        const p1 = { shape: SHAPES[t1], type: t1, color: COLORS[t1] };
+        const p2 = { shape: SHAPES[t2], type: t2, color: COLORS[t2] };
+        
+        setCurrentPiece(p1);
+        setNextPiece(p2);
+        setCurrentPosition({ r: 0, c: Math.floor((COLS - p1.shape[0].length) / 2) });
     };
 
     const spawnPiece = () => {
         const keys = Object.keys(SHAPES);
         const randomType = keys[Math.floor(Math.random() * keys.length)];
         const shape = SHAPES[randomType];
-        const newPiece = { shape, type: randomType, color: COLORS[randomType] };
+        const generated = { shape, type: randomType, color: COLORS[randomType] };
         
-        const initialPos = { r: 0, c: Math.floor((COLS - shape[0].length) / 2) };
+        // Use nextPiece if available, and set generated as the next one
+        const pieceToSpawn = nextPiece || generated;
+        const initialPos = { r: 0, c: Math.floor((COLS - pieceToSpawn.shape[0].length) / 2) };
 
-        if (checkCollision(shape, initialPos, grid)) {
+        if (checkCollision(pieceToSpawn.shape, initialPos, grid)) {
             // Game Over
             setIsPlaying(false);
             setGameOver(true);
@@ -112,7 +126,8 @@ const TetrisPage = () => {
             registerGameCompletion('tetris', 'medium', timeElapsed, score);
             setShowVictory(true);
         } else {
-            setCurrentPiece(newPiece);
+            setCurrentPiece(pieceToSpawn);
+            setNextPiece(generated);
             setCurrentPosition(initialPos);
         }
     };
@@ -270,66 +285,134 @@ const TetrisPage = () => {
                 </button>
             </div>
 
-            {/* Score HUD */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                <span>Puntuación: <strong style={{ color: 'var(--text-main)' }}>{score}</strong></span>
-                <span>Líneas despejadas: <strong style={{ color: 'var(--text-main)' }}>{linesCleared}</strong></span>
-            </div>
+            {/* Main Flex Layout */}
+            <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', alignItems: 'flex-start', marginBottom: '20px' }}>
+                
+                {/* Grid Area */}
+                <div style={{ position: 'relative' }}>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: `repeat(${COLS}, 1fr)`,
+                        gap: '2px',
+                        backgroundColor: 'rgba(15, 23, 42, 0.7)',
+                        border: '3px solid rgba(59, 130, 246, 0.4)',
+                        borderRadius: '16px',
+                        padding: '6px',
+                        width: '210px',
+                        height: '420px',
+                        boxShadow: 'inset 0 4px 15px rgba(0,0,0,0.6), 0 0 20px rgba(59,130,246,0.1)'
+                    }}>
+                        {getRenderedGrid().map((row, r) => (
+                            row.map((cell, c) => (
+                                <div
+                                    key={`${r}-${c}`}
+                                    style={{
+                                        backgroundColor: cell || 'transparent',
+                                        borderRadius: cell ? '4px' : 'none',
+                                        border: cell ? '1px solid rgba(0,0,0,0.2)' : '1px dashed rgba(255,255,255,0.015)',
+                                        boxShadow: cell ? `inset 0 2px 4px rgba(255,255,255,0.25), 0 0 8px ${cell}` : 'none'
+                                    }}
+                                />
+                            ))
+                        ))}
+                    </div>
 
-            {/* Grid Area */}
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(${COLS}, 1fr)`,
-                    gap: '2px',
-                    backgroundColor: 'rgba(15, 23, 42, 0.7)',
-                    border: '3px solid var(--border)',
-                    borderRadius: '12px',
-                    padding: '6px',
-                    width: '220px',
-                    height: '440px',
-                    boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.5)'
-                }}>
-                    {getRenderedGrid().map((row, r) => (
-                        row.map((cell, c) => (
-                            <div
-                                key={`${r}-${c}`}
+                    {/* Cover Overlay for Non-playing State */}
+                    {!isPlaying && (
+                        <div style={{
+                            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                            backgroundColor: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(4px)',
+                            borderRadius: '16px', display: 'flex', flexDirection: 'column',
+                            alignItems: 'center', justifyContent: 'center', gap: '15px', zIndex: 10
+                        }}>
+                            <h3 style={{ margin: 0, color: 'var(--text-main)', fontSize: '1.2rem' }}>
+                                {gameOver ? '¡Fin de la Partida!' : 'Listo para jugar'}
+                            </h3>
+                            <button
+                                onClick={startGame}
                                 style={{
-                                    backgroundColor: cell || 'transparent',
-                                    borderRadius: cell ? '3px' : 'none',
-                                    border: cell ? '1px solid rgba(0,0,0,0.15)' : '1px dashed rgba(255,255,255,0.015)',
-                                    boxShadow: cell ? 'inset 0 2px 4px rgba(255,255,255,0.2)' : 'none'
+                                    padding: '10px 20px', borderRadius: '10px', border: 'none',
+                                    background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
+                                    color: 'white', fontWeight: 'bold', cursor: 'pointer',
+                                    display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 4px 15px rgba(59,130,246,0.3)'
                                 }}
-                            />
-                        ))
-                    ))}
+                            >
+                                <Play size={18} fill="white" />
+                                <span>{gameOver ? 'Reintentar' : 'Comenzar'}</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
 
-                {/* Cover Overlay for Non-playing State */}
-                {!isPlaying && (
+                {/* Sidebar Column */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '120px' }}>
+                    {/* Next Piece Container */}
                     <div style={{
-                        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                        backgroundColor: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(4px)',
-                        borderRadius: '12px', display: 'flex', flexDirection: 'column',
-                        alignItems: 'center', justifyContent: 'center', gap: '15px'
+                        backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                        border: '1px solid var(--border)',
+                        borderRadius: '14px',
+                        padding: '12px',
+                        textAlign: 'center'
                     }}>
-                        <h3 style={{ margin: 0, color: 'var(--text-main)', fontSize: '1.2rem' }}>
-                            {gameOver ? '¡Fin de la Partida!' : 'Listo para jugar'}
-                        </h3>
-                        <button
-                            onClick={startGame}
-                            style={{
-                                padding: '10px 20px', borderRadius: '10px', border: 'none',
-                                background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
-                                color: 'white', fontWeight: 'bold', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 4px 15px rgba(59,130,246,0.3)'
-                            }}
-                        >
-                            <Play size={18} fill="white" />
-                            <span>{gameOver ? 'Reintentar' : 'Comenzar'}</span>
-                        </button>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 'bold', marginBottom: '8px' }}>
+                            Siguiente
+                        </div>
+                        <div style={{
+                            width: '80px', height: '80px', margin: '0 auto',
+                            display: 'grid', gridTemplateRows: 'repeat(4, 1fr)', gridTemplateColumns: 'repeat(4, 1fr)',
+                            gap: '2px', backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '6px'
+                        }}>
+                            {nextPiece ? (
+                                (() => {
+                                    // Pad/center the shape inside a 4x4 matrix
+                                    const nextShape = nextPiece.shape;
+                                    const shapeRows = nextShape.length;
+                                    const shapeCols = nextShape[0].length;
+                                    const padRow = Math.floor((4 - shapeRows) / 2);
+                                    const padCol = Math.floor((4 - shapeCols) / 2);
+
+                                    return Array(4).fill(null).map((_, r) => (
+                                        Array(4).fill(null).map((_, c) => {
+                                            const shapeR = r - padRow;
+                                            const shapeC = c - padCol;
+                                            const isFilled = shapeR >= 0 && shapeR < shapeRows && shapeC >= 0 && shapeC < shapeCols && nextShape[shapeR][shapeC];
+                                            return (
+                                                <div
+                                                    key={`${r}-${c}`}
+                                                    style={{
+                                                        backgroundColor: isFilled ? nextPiece.color : 'transparent',
+                                                        borderRadius: isFilled ? '2px' : 'none',
+                                                        boxShadow: isFilled ? `0 0 6px ${nextPiece.color}` : 'none'
+                                                    }}
+                                                />
+                                            );
+                                        })
+                                    ));
+                                })()
+                            ) : (
+                                Array(16).fill(null).map((_, idx) => (
+                                    <div key={idx} style={{ backgroundColor: 'transparent' }} />
+                                ))
+                            )}
+                        </div>
                     </div>
-                )}
+
+                    {/* HUD Stats */}
+                    <div style={{
+                        backgroundColor: 'rgba(15, 23, 42, 0.4)',
+                        border: '1px solid var(--border)',
+                        borderRadius: '14px',
+                        padding: '12px',
+                        fontSize: '0.8rem',
+                        textAlign: 'left'
+                    }}>
+                        <div style={{ color: 'var(--text-muted)', marginBottom: '4px' }}>Puntos</div>
+                        <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--text-main)', fontFamily: 'monospace', marginBottom: '10px' }}>{score}</div>
+                        
+                        <div style={{ color: 'var(--text-muted)', marginBottom: '4px' }}>Líneas</div>
+                        <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--text-main)', fontFamily: 'monospace' }}>{linesCleared}</div>
+                    </div>
+                </div>
             </div>
 
             {/* Mobile On-screen controls */}

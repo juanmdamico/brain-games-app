@@ -369,43 +369,60 @@ const Connect4Page = () => {
 
             {/* The Connect 4 Grid */}
             <div style={{
-                backgroundColor: 'rgba(29, 78, 216, 0.95)', // Classic blue board color
-                border: '4px solid #1e3a8a',
-                borderRadius: '16px',
-                padding: '16px',
+                background: 'linear-gradient(135deg, rgba(30, 64, 175, 0.85), rgba(17, 24, 39, 0.9))',
+                backdropFilter: 'blur(16px)',
+                border: '2px solid rgba(59, 130, 246, 0.4)',
+                borderRadius: '24px',
+                padding: '20px',
                 display: 'inline-grid',
                 gridTemplateColumns: `repeat(${COLS}, 1fr)`,
-                gap: '12px',
-                boxShadow: '0 15px 30px rgba(0, 0, 0, 0.4)',
+                gap: '14px',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 2px 8px rgba(255, 255, 255, 0.15)',
                 position: 'relative'
             }}>
                 {board.map((row, rIndex) => (
                     row.map((cell, cIndex) => {
                         const isWin = isWinningCell(rIndex, cIndex);
+                        const isLastPlaced = cell && rIndex === getNextAvailableRow(cIndex, board);
+                        
+                        let discBg = 'radial-gradient(circle at 30% 30%, #1e293b, #0f172a)';
+                        let discShadow = 'none';
+                        
+                        if (cell === 'R') {
+                            discBg = 'radial-gradient(circle at 35% 35%, #ff6b6b, #ef4444, #991b1b)';
+                            discShadow = '0 4px 10px rgba(239, 68, 68, 0.4), inset 0 -4px 6px rgba(0,0,0,0.4)';
+                        } else if (cell === 'Y') {
+                            discBg = 'radial-gradient(circle at 35% 35%, #fbbf24, #f59e0b, #b45309)';
+                            discShadow = '0 4px 10px rgba(245, 158, 11, 0.4), inset 0 -4px 6px rgba(0,0,0,0.4)';
+                        }
+
                         return (
                             <button
                                 key={`${rIndex}-${cIndex}`}
                                 onClick={() => handleCellClick(cIndex)}
                                 style={{
-                                    width: '50px', height: '50px',
+                                    width: '52px', height: '52px',
                                     borderRadius: '50%', border: 'none',
-                                    backgroundColor: cell === 'R' ? '#ef4444' : cell === 'Y' ? '#f59e0b' : '#0f172a',
+                                    background: discBg,
+                                    boxShadow: discShadow,
                                     cursor: winner || isAiThinking || board[0][cIndex] !== null ? 'not-allowed' : 'pointer',
-                                    boxShadow: cell ? 'inset 0 4px 8px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.3)' : 'none',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    outline: 'none', transition: 'transform 0.15s, background-color 0.2s',
+                                    outline: 'none', transition: 'all 0.25s',
                                     border: isWin ? '3px solid #10b981' : 'none',
-                                    transform: isWin ? 'scale(1.1)' : 'none',
-                                    animation: cell && rIndex === getNextAvailableRow(cIndex, board) ? 'dropDisc 0.4s cubic-bezier(0.25, 1, 0.5, 1)' : 'none'
+                                    transform: isWin ? 'scale(1.15)' : 'none',
+                                    boxShadow: isWin ? '0 0 20px #10b981' : discShadow,
+                                    animation: isLastPlaced ? 'dropDisc 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.15)' : 'none'
                                 }}
                                 onMouseOver={(e) => {
                                     if (!cell && !winner && !isAiThinking && board[0][cIndex] === null) {
-                                        e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.3)';
+                                        e.currentTarget.style.background = 'radial-gradient(circle at 35% 35%, rgba(239, 68, 68, 0.5), rgba(239, 68, 68, 0.1))';
+                                        e.currentTarget.style.transform = 'scale(1.05)';
                                     }
                                 }}
                                 onMouseOut={(e) => {
                                     if (!cell) {
-                                        e.currentTarget.style.backgroundColor = '#0f172a';
+                                        e.currentTarget.style.background = 'radial-gradient(circle at 30% 30%, #1e293b, #0f172a)';
+                                        e.currentTarget.style.transform = 'none';
                                     }
                                 }}
                             >
@@ -435,8 +452,12 @@ const Connect4Page = () => {
             {/* Custom Disc Falling animation */}
             <style>{`
                 @keyframes dropDisc {
-                    from { transform: translateY(-300px); }
-                    to { transform: translateY(0); }
+                    0% { transform: translateY(-380px); }
+                    60% { transform: translateY(0); }
+                    75% { transform: translateY(-24px); }
+                    90% { transform: translateY(0); }
+                    95% { transform: translateY(-6px); }
+                    100% { transform: translateY(0); }
                 }
             `}</style>
         </div>

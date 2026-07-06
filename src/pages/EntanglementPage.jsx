@@ -173,6 +173,42 @@ const EntanglementPage = () => {
                 position: 'relative',
                 overflow: 'hidden'
             }}>
+                {/* SVG Laser Line Overlay */}
+                {hoveredPairId !== null && (() => {
+                    const entangledCells = grid.filter(c => c.pairId === hoveredPairId);
+                    if (entangledCells.length === 2) {
+                        const [c1, c2] = entangledCells;
+                        const r1 = Math.floor(c1.id / SIZE);
+                        const col1 = c1.id % SIZE;
+                        const r2 = Math.floor(c2.id / SIZE);
+                        const col2 = c2.id % SIZE;
+
+                        const x1 = 12.5 + col1 * 25;
+                        const y1 = 12.5 + r1 * 25;
+                        const x2 = 12.5 + col2 * 25;
+                        const y2 = 12.5 + r2 * 25;
+                        const pairColor = PAIR_COLORS[hoveredPairId - 1];
+
+                        return (
+                            <svg style={{
+                                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                                pointerEvents: 'none', zIndex: 1
+                            }}>
+                                <line
+                                    x1={`${x1}%`} y1={`${y1}%`}
+                                    x2={`${x2}%`} y2={`${y2}%`}
+                                    stroke={pairColor}
+                                    strokeWidth="3"
+                                    strokeDasharray="8 6"
+                                    className="laser-line"
+                                    style={{ filter: `drop-shadow(0 0 10px ${pairColor})` }}
+                                />
+                            </svg>
+                        );
+                    }
+                    return null;
+                })()}
+
                 {grid.map(cell => {
                     const isHovered = hoveredPairId !== null && cell.pairId === hoveredPairId;
                     const isLastClicked = lastClickedIds.includes(cell.id);
@@ -198,6 +234,7 @@ const EntanglementPage = () => {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 position: 'relative',
+                                zIndex: 2,
                                 boxShadow: isHovered 
                                     ? `0 0 15px ${cell.color}` 
                                     : cell.color 
@@ -251,6 +288,12 @@ const EntanglementPage = () => {
                     0% { transform: scale(1); }
                     50% { transform: scale(1.08); filter: brightness(1.2); }
                     100% { transform: scale(1); }
+                }
+                @keyframes laserSlide {
+                    to { stroke-dashoffset: -28; }
+                }
+                .laser-line {
+                    animation: laserSlide 0.8s linear infinite;
                 }
                 .glow-orb {
                     position: absolute;

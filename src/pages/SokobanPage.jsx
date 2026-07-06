@@ -269,38 +269,92 @@ const SokobanPage = () => {
                 {grid.map((row, rIdx) => (
                     <div key={rIdx} style={{ display: 'flex' }}>
                         {row.map((cell, cIdx) => {
-                            let renderChar = '';
-                            let bgColor = 'transparent';
-                            let border = 'none';
+                            let content = null;
+                            let cellStyle = {
+                                width: '42px', height: '42px',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                margin: '2px', position: 'relative', borderRadius: '8px',
+                                transition: 'all 0.15s'
+                            };
 
                             if (cell === '#') {
-                                renderChar = '🧱';
-                                bgColor = 'rgba(255,255,255,0.02)';
+                                // Wall: stone brick look
+                                cellStyle = {
+                                    ...cellStyle,
+                                    background: 'linear-gradient(135deg, #374151, #111827)',
+                                    border: '1px solid #4b5563',
+                                    borderRadius: '6px',
+                                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.05), 0 4px 6px rgba(0,0,0,0.4)'
+                                };
+                                content = (
+                                    <div style={{ width: '100%', height: '100%', border: '1px solid #1f2937', opacity: 0.3 }} />
+                                );
                             } else if (cell === '@' || cell === '+') {
-                                renderChar = '👷';
+                                // Player: glowing worker bubble
+                                cellStyle = {
+                                    ...cellStyle,
+                                    background: 'radial-gradient(circle, #3b82f6, #1d4ed8)',
+                                    border: '2px solid #60a5fa',
+                                    boxShadow: '0 0 15px rgba(59, 130, 246, 0.7), inset 0 2px 4px rgba(255,255,255,0.3)',
+                                    transform: 'scale(0.95)',
+                                    zIndex: 2
+                                };
+                                content = (
+                                    <span style={{ fontSize: '1.2rem' }}>👷</span>
+                                );
                             } else if (cell === '$') {
-                                renderChar = '📦';
-                                bgColor = 'rgba(245, 158, 11, 0.1)';
-                                border = '1px solid rgba(245, 158, 11, 0.2)';
+                                // Box: wooden crate look
+                                cellStyle = {
+                                    ...cellStyle,
+                                    background: 'linear-gradient(135deg, #d97706, #78350f)',
+                                    border: '2px solid #b45309',
+                                    boxShadow: 'inset 0 0 12px rgba(0,0,0,0.6), 0 4px 6px rgba(0,0,0,0.3)'
+                                };
+                                content = (
+                                    <div style={{
+                                        width: '80%', height: '80%', border: '2px solid rgba(0,0,0,0.25)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: 'rgba(0,0,0,0.4)', fontSize: '0.8rem'
+                                    }}>X</div>
+                                );
                             } else if (cell === '*') {
-                                renderChar = '✅';
-                                bgColor = 'rgba(16, 185, 129, 0.2)';
-                                border = '1px solid rgba(16, 185, 129, 0.4)';
+                                // Box on target: glowing cargo crate
+                                cellStyle = {
+                                    ...cellStyle,
+                                    background: 'linear-gradient(135deg, #10b981, #064e3b)',
+                                    border: '2px solid #34d399',
+                                    boxShadow: '0 0 15px rgba(16, 185, 129, 0.6), inset 0 0 10px rgba(0,0,0,0.6)'
+                                };
+                                content = (
+                                    <div style={{
+                                        width: '80%', height: '80%', border: '2px solid rgba(255,255,255,0.3)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: 'white', fontSize: '0.9rem'
+                                    }}>✓</div>
+                                );
                             } else if (cell === '.') {
-                                renderChar = '🔴';
+                                // Target: laser circle on floor
+                                cellStyle = {
+                                    ...cellStyle,
+                                    border: '2px dashed #f43f5e',
+                                    background: 'rgba(244, 63, 94, 0.05)'
+                                };
+                                content = (
+                                    <div style={{
+                                        width: '10px', height: '10px', borderRadius: '50%',
+                                        backgroundColor: '#f43f5e', boxShadow: '0 0 10px #f43f5e'
+                                    }} />
+                                );
+                            } else {
+                                // Empty tile
+                                cellStyle = {
+                                    ...cellStyle,
+                                    background: 'rgba(255, 255, 255, 0.005)',
+                                    border: '1px solid rgba(255, 255, 255, 0.01)'
+                                };
                             }
 
                             return (
-                                <div
-                                    key={cIdx}
-                                    style={{
-                                        width: '40px', height: '40px',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        fontSize: '1.4rem', backgroundColor: bgColor, border: border,
-                                        borderRadius: cell === '#' ? '4px' : '8px', margin: '1px'
-                                    }}
-                                >
-                                    {renderChar}
+                                <div key={cIdx} style={cellStyle}>
+                                    {content}
                                 </div>
                             );
                         })}

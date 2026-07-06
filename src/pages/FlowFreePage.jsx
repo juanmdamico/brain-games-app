@@ -209,6 +209,7 @@ const FlowFreePage = () => {
 
             {/* Grid */}
             <div style={{
+                position: 'relative',
                 display: 'grid',
                 gridTemplateColumns: `repeat(${SIZE}, 1fr)`,
                 gap: '8px',
@@ -220,10 +221,40 @@ const FlowFreePage = () => {
                 boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.5)',
                 marginBottom: '20px'
             }}>
+                {/* SVG connection lines overlay */}
+                <svg viewBox="0 0 100 100" style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    pointerEvents: 'none', zIndex: 1, padding: '16px', boxSizing: 'border-box'
+                }}>
+                    {Object.keys(paths).map(color => {
+                        const path = paths[color];
+                        if (path.length < 2) return null;
+                        
+                        const d = path.map((cell, idx) => {
+                            // Center position of cells on a 0-100 scale
+                            const x = cell.c * 20 + 10;
+                            const y = cell.r * 20 + 10;
+                            return `${idx === 0 ? 'M' : 'L'} ${x} ${y}`;
+                        }).join(' ');
+
+                        return (
+                            <path
+                                key={color}
+                                d={d}
+                                fill="none"
+                                stroke={COLOR_HEX[color]}
+                                strokeWidth="6"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                style={{ filter: `drop-shadow(0 0 6px ${COLOR_HEX[color]})`, opacity: 0.8 }}
+                            />
+                        );
+                    })}
+                </svg>
+
                 {grid.map((row, rIdx) => (
                     row.map((cell, cIdx) => {
                         const isDot = cell.type === 'dot';
-                        const isLine = cell.type === 'line';
                         const isPathSelected = selectedColor && paths[selectedColor].some(p => p.r === rIdx && p.c === cIdx);
 
                         return (
@@ -233,13 +264,14 @@ const FlowFreePage = () => {
                                 style={{
                                     border: 'none',
                                     borderRadius: '12px',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.02)',
-                                    border: isPathSelected ? `2px solid ${COLOR_HEX[selectedColor]}` : '1px solid rgba(255,255,255,0.03)',
+                                    backgroundColor: 'transparent',
+                                    border: isPathSelected ? `1px solid ${COLOR_HEX[selectedColor]}` : '1px solid rgba(255,255,255,0.01)',
                                     cursor: winner ? 'default' : 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    position: 'relative'
+                                    position: 'relative',
+                                    zIndex: 2
                                 }}
                             >
                                 {/* Dot rendering */}
@@ -248,15 +280,6 @@ const FlowFreePage = () => {
                                         width: '26px', height: '26px', borderRadius: '50%',
                                         backgroundColor: COLOR_HEX[cell.color],
                                         boxShadow: `0 0 15px ${COLOR_HEX[cell.color]}`
-                                    }} />
-                                )}
-
-                                {/* Line rendering */}
-                                {isLine && (
-                                    <div style={{
-                                        width: '12px', height: '12px', borderRadius: '50%',
-                                        backgroundColor: COLOR_HEX[cell.color],
-                                        boxShadow: `0 0 8px ${COLOR_HEX[cell.color]}`
                                     }} />
                                 )}
                             </button>
