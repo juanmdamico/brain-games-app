@@ -10,6 +10,7 @@ const formatTime = (totalSeconds) => {
 };
 
 const gameNameToId = (name) => {
+    if (!name) return 'juego';
     const map = {
         'Sudoku': 'sudoku',
         'Buscaminas': 'buscaminas',
@@ -28,29 +29,53 @@ const gameNameToId = (name) => {
     return map[name] || name.toLowerCase();
 };
 
-const VictoryModal = ({ isOpen, onClose, time, gameName, difficulty = 'medium', extraScore = 0 }) => {
+const NEW_GAMES_HANDLED_DIRECTLY = [
+    'conecta4', 'reflejos', 'deslizante', 'sopadeletras', 
+    'ahorcado', 'mastermind', 'sokoban', 'tetris', 
+    'crucigrama', 'lineascolores', 'testmecanografia'
+];
+
+const VictoryModal = ({ 
+    isOpen, 
+    onClose, 
+    time, 
+    timeElapsed,
+    gameName, 
+    difficulty = 'medium', 
+    extraScore = 0,
+    title,
+    message,
+    onPlayAgain,
+    playAgainText
+}) => {
     const { playVictorySfx, registerGameCompletion, records } = useApp();
     const [leaderboard, setLeaderboard] = useState([]);
     const [personalBest, setPersonalBest] = useState(null);
 
-    const gameId = gameNameToId(gameName);
+    const actualTime = time !== undefined ? time : (timeElapsed !== undefined ? timeElapsed : 0);
+    const displayTitle = title || "¡Victoria!";
+    const displayMessage = message || (gameName ? `Has resuelto el juego ${gameName} (${difficulty === 'easy' ? 'Fácil' : difficulty === 'medium' ? 'Medio' : 'Difícil'})` : '');
+    
+    const gameId = gameName ? gameNameToId(gameName) : 'juego';
+    const alreadyRegistered = NEW_GAMES_HANDLED_DIRECTLY.includes(gameId);
 
     useEffect(() => {
         if (isOpen) {
             // 1. Play synthesized victory music
             playVictorySfx();
 
-            // 2. Register completion in context (this updates streaks, achievements, local records)
-            registerGameCompletion(gameId, difficulty, time, extraScore);
+            // 2. Register completion in context (only if not already registered directly by the new game)
+            if (!alreadyRegistered && gameName) {
+                registerGameCompletion(gameId, difficulty, actualTime, extraScore);
+            }
 
             // 3. Setup simulated leaderboard
             const key = `${gameId}_${difficulty}`;
             const localBestTimes = records[key] || [];
-            const currentBest = localBestTimes[0] || time;
+            const currentBest = localBestTimes[0] || actualTime;
             setPersonalBest(currentBest);
 
             // Generate virtual rivals
-            // To make it look real, we generate times centered around typical speeds
             const baseTimes = {
                 sudoku: { easy: 120, medium: 240, hard: 480 },
                 buscaminas: { beginner: 45, intermediate: 180, expert: 400 },
@@ -74,7 +99,7 @@ const VictoryModal = ({ isOpen, onClose, time, gameName, difficulty = 'medium', 
             ];
 
             // Add player
-            rivals.push({ name: 'Tú (Actual)', time: time, isPlayer: true });
+            rivals.push({ name: 'Tú (Actual)', time: actualTime, isPlayer: true });
             
             // Sort leaderboard
             rivals.sort((a, b) => a.time - b.time);
@@ -106,11 +131,19 @@ const VictoryModal = ({ isOpen, onClose, time, gameName, difficulty = 'medium', 
             };
             frame();
         }
-    }, [isOpen, gameId, difficulty, time, extraScore]);
+    }, [isOpen, gameId, difficulty, actualTime, extraScore, alreadyRegistered]);
 
     if (!isOpen) return null;
 
     const playerRank = leaderboard.findIndex(r => r.isPlayer) + 1;
+
+    const handleButtonClick = () => {
+        if (onPlayAgain) {
+            onPlayAgain();
+        } else {
+            onClose();
+        }
+    };
 
     return (
         <div style={{
@@ -156,17 +189,19 @@ const VictoryModal = ({ isOpen, onClose, time, gameName, difficulty = 'medium', 
                 </div>
 
                 <h2 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-main)', margin: '0 0 8px 0' }}>
-                    ¡Victoria!
+                    {displayTitle}
                 </h2>
                 
-                <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginBottom: '20px' }}>
-                    Has resuelto el juego <strong>{gameName}</strong> ({difficulty === 'easy' ? 'Fácil' : difficulty === 'medium' ? 'Medio' : 'Difícil'})
-                </p>
+                {displayMessage && (
+                    <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginBottom: '20px' }}>
+                        {displayMessage}
+                    </p>
+                )}
 
                 {/* Score / Time box */}
                 <div style={{ 
                     display: 'grid',
-                    gridTemplateColumns: personalBest && personalBest !== time ? '1fr 1fr' : '1fr',
+                    gridTemplateColumns: personalBest && personalBest !== actualTime ? '1fr 1fr' : '1fr',
                     gap: '12px',
                     backgroundColor: 'rgba(15, 23, 42, 0.4)', 
                     padding: '16px', 
@@ -177,20 +212,20 @@ const VictoryModal = ({ isOpen, onClose, time, gameName, difficulty = 'medium', 
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                         <Clock size={20} color="#60a5fa" />
                         <div style={{ textAlign: 'left' }}>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 'bold' }}>Tiempo</div>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 'bold' }}>Resultado</div>
                             <div style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'monospace' }}>
-                                {formatTime(time)}
+                                {gameId === 'reflejos' ? `${actualTime} ms` : formatTime(actualTime)}
                             </div>
                         </div>
                     </div>
 
-                    {personalBest && personalBest !== time && (
+                    {personalBest && personalBest !== actualTime && (
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', borderLeft: '1px solid rgba(255,255,255,0.08)', paddingLeft: '12px' }}>
                             <Award size={20} color="#fbbf24" />
                             <div style={{ textAlign: 'left' }}>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 'bold' }}>Record Personal</div>
                                 <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#fbbf24', fontFamily: 'monospace' }}>
-                                    {formatTime(personalBest)}
+                                    {gameId === 'reflejos' ? `${personalBest} ms` : formatTime(personalBest)}
                                 </div>
                             </div>
                         </div>
@@ -218,7 +253,9 @@ const VictoryModal = ({ isOpen, onClose, time, gameName, difficulty = 'medium', 
                                 }}
                             >
                                 <span>{index + 1}. {rival.name}</span>
-                                <span style={{ fontFamily: 'monospace' }}>{formatTime(rival.time)}</span>
+                                <span style={{ fontFamily: 'monospace' }}>
+                                    {gameId === 'reflejos' ? `${rival.time} ms` : formatTime(rival.time)}
+                                </span>
                             </div>
                         ))}
                     </div>
@@ -228,7 +265,7 @@ const VictoryModal = ({ isOpen, onClose, time, gameName, difficulty = 'medium', 
                 </div>
 
                 <button 
-                    onClick={onClose}
+                    onClick={handleButtonClick}
                     style={{
                         width: '100%', padding: '14px',
                         backgroundColor: '#10b981', color: 'white',
@@ -240,7 +277,7 @@ const VictoryModal = ({ isOpen, onClose, time, gameName, difficulty = 'medium', 
                     onMouseOver={e => e.currentTarget.style.backgroundColor = '#059669'}
                     onMouseOut={e => e.currentTarget.style.backgroundColor = '#10b981'}
                 >
-                    Continuar
+                    {playAgainText || (onPlayAgain ? "Jugar de Nuevo" : "Continuar")}
                 </button>
             </div>
             <style>{`
