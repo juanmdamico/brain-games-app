@@ -34,7 +34,11 @@ const GAMES_LIST = [
     { id: 'sopadeletras', name: 'Sopa de Letras', path: '/sopadeletras' },
     { id: 'ahorcado', name: 'Ahorcado', path: '/ahorcado' },
     { id: 'mastermind', name: 'Mastermind', path: '/mastermind' },
-    { id: 'sokoban', name: 'Sokoban', path: '/sokoban' }
+    { id: 'sokoban', name: 'Sokoban', path: '/sokoban' },
+    { id: 'tetris', name: 'Tetris', path: '/tetris' },
+    { id: 'crucigrama', name: 'Crucigrama', path: '/crucigrama' },
+    { id: 'lineascolores', name: 'Líneas de Colores', path: '/lineascolores' },
+    { id: 'testmecanografia', name: 'Test de Mecanografía', path: '/testmecanografia' }
 ];
 
 export const AppProvider = ({ children }) => {

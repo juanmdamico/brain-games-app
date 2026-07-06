@@ -25,7 +25,11 @@ const GAMES = [
     { to: "/sopadeletras", icon: "🔠", title: "Sopa de Letras", category: "arcade", description: "Encuentra las palabras ocultas en la cuadrícula de letras en horizontal, vertical o diagonal." },
     { to: "/ahorcado", icon: "🚀", title: "Ahorcado", category: "casual", description: "Adivina la palabra secreta letra por letra y ayuda a lanzar el cohete Divertimente." },
     { to: "/mastermind", icon: "🔐", title: "Mastermind", category: "logic", description: "Descifra la combinación secreta de 4 colores interpretando las pistas de acierto." },
-    { to: "/sokoban", icon: "📦", title: "Sokoban", category: "logic", description: "Empuja todas las cajas del almacén hasta las posiciones indicadas sin quedarte atrapado." }
+    { to: "/sokoban", icon: "📦", title: "Sokoban", category: "logic", description: "Empuja todas las cajas del almacén hasta las posiciones indicadas sin quedarte atrapado." },
+    { to: "/tetris", icon: "🧱", title: "Tetris", category: "arcade", description: "Acomoda las piezas que caen para completar líneas horizontales antes de llenar la pantalla." },
+    { to: "/crucigrama", icon: "🔠", title: "Crucigrama", category: "arcade", description: "Resuelve las palabras cruzadas en la grilla completando las definiciones horizontales y verticales." },
+    { to: "/lineascolores", icon: "🟢", title: "Líneas de Colores", category: "logic", description: "Conecta los puntos del mismo color dibujando líneas en el tablero sin cruzarlas." },
+    { to: "/testmecanografia", icon: "⌨️", title: "Test de Teclado", category: "arcade", description: "Escribe el texto a toda velocidad en un minuto y mide tus palabras por minuto (WPM)." }
 ];
 
 const Home = () => {

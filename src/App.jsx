@@ -21,6 +21,10 @@ import WordSearchPage from './pages/WordSearchPage';
 import HangmanPage from './pages/HangmanPage';
 import MastermindPage from './pages/MastermindPage';
 import SokobanPage from './pages/SokobanPage';
+import TetrisPage from './pages/TetrisPage';
+import CrosswordPage from './pages/CrosswordPage';
+import FlowFreePage from './pages/FlowFreePage';
+import TypingTestPage from './pages/TypingTestPage';
 import { AppProvider } from './context/AppContext';
 import AppLayout from './components/common/AppLayout';
 import './index.css';
@@ -52,6 +56,10 @@ function App() {
             <Route path="/ahorcado" element={<HangmanPage />} />
             <Route path="/mastermind" element={<MastermindPage />} />
             <Route path="/sokoban" element={<SokobanPage />} />
+            <Route path="/tetris" element={<TetrisPage />} />
+            <Route path="/crucigrama" element={<CrosswordPage />} />
+            <Route path="/lineascolores" element={<FlowFreePage />} />
+            <Route path="/testmecanografia" element={<TypingTestPage />} />
           </Routes>
         </AppLayout>
       </Router>
