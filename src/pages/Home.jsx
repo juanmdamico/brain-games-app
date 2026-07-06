@@ -30,7 +30,8 @@ const GAMES = [
     { to: "/crucigrama", icon: "🔠", title: "Crucigrama", category: "arcade", description: "Resuelve las palabras cruzadas en la grilla completando las definiciones horizontales y verticales." },
     { to: "/lineascolores", icon: "🟢", title: "Líneas de Colores", category: "logic", description: "Conecta los puntos del mismo color dibujando líneas en el tablero sin cruzarlas." },
     { to: "/testmecanografia", icon: "⌨️", title: "Test de Teclado", category: "arcade", description: "Escribe el texto a toda velocidad en un minuto y mide tus palabras por minuto (WPM)." },
-    { to: "/entrelazamiento", icon: "⚛️", title: "Enredo Cuántico", category: "logic", description: "Alinea las flechas rotándolas. Los nodos del mismo color están entrelazados cuánticamente." }
+    { to: "/entrelazamiento", icon: "⚛️", title: "Enredo Cuántico", category: "logic", description: "Alinea las flechas rotándolas. Los nodos del mismo color están entrelazados cuánticamente." },
+    { to: "/futoshiki", icon: "🧮", title: "Futoshiki", category: "logic", description: "Acomoda los números del 1 al 4 respetando las desigualdades mayor y menor." }
 ];
 
 const Home = () => {

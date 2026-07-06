@@ -39,7 +39,8 @@ const GAMES_LIST = [
     { id: 'crucigrama', name: 'Crucigrama', path: '/crucigrama' },
     { id: 'lineascolores', name: 'Líneas de Colores', path: '/lineascolores' },
     { id: 'testmecanografia', name: 'Test de Mecanografía', path: '/testmecanografia' },
-    { id: 'entrelazamiento', name: 'Enredo Cuántico', path: '/entrelazamiento' }
+    { id: 'entrelazamiento', name: 'Enredo Cuántico', path: '/entrelazamiento' },
+    { id: 'futoshiki', name: 'Futoshiki', path: '/futoshiki' }
 ];
 
 export const AppProvider = ({ children }) => {
