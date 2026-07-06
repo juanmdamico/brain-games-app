@@ -25,6 +25,7 @@ import TetrisPage from './pages/TetrisPage';
 import CrosswordPage from './pages/CrosswordPage';
 import FlowFreePage from './pages/FlowFreePage';
 import TypingTestPage from './pages/TypingTestPage';
+import EntanglementPage from './pages/EntanglementPage';
 import { AppProvider } from './context/AppContext';
 import AppLayout from './components/common/AppLayout';
 import './index.css';
@@ -60,6 +61,7 @@ function App() {
             <Route path="/crucigrama" element={<CrosswordPage />} />
             <Route path="/lineascolores" element={<FlowFreePage />} />
             <Route path="/testmecanografia" element={<TypingTestPage />} />
+            <Route path="/entrelazamiento" element={<EntanglementPage />} />
           </Routes>
         </AppLayout>
       </Router>

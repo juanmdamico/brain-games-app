@@ -38,7 +38,8 @@ const GAMES_LIST = [
     { id: 'tetris', name: 'Tetris', path: '/tetris' },
     { id: 'crucigrama', name: 'Crucigrama', path: '/crucigrama' },
     { id: 'lineascolores', name: 'Líneas de Colores', path: '/lineascolores' },
-    { id: 'testmecanografia', name: 'Test de Mecanografía', path: '/testmecanografia' }
+    { id: 'testmecanografia', name: 'Test de Mecanografía', path: '/testmecanografia' },
+    { id: 'entrelazamiento', name: 'Enredo Cuántico', path: '/entrelazamiento' }
 ];
 
 export const AppProvider = ({ children }) => {
