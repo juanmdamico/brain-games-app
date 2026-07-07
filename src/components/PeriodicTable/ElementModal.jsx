@@ -2,16 +2,16 @@ import React from 'react';
 import { X } from 'lucide-react';
 
 const categoryColors = {
-  'diatomic nonmetal': '#ff6b6b',
-  'noble gas': '#4ecdc4',
-  'alkali metal': '#ffa62b',
-  'alkaline earth metal': '#f7d794',
-  'metalloid': '#3dc1d3',
-  'polyatomic nonmetal': '#e66767',
-  'post-transition metal': '#54a0ff',
-  'transition metal': '#ff9ff3',
-  'lanthanide': '#f368e0',
-  'actinide': '#ff9f43',
+  'no metal diatómico': '#ff6b6b',
+  'gas noble': '#4ecdc4',
+  'metal alcalino': '#ffa62b',
+  'metal alcalinotérreo': '#f7d794',
+  'metaloide': '#3dc1d3',
+  'no metal poliatómico': '#e66767',
+  'metal del bloque p': '#54a0ff',
+  'metal de transición': '#ff9ff3',
+  'lantánido': '#f368e0',
+  'actínido': '#ff9f43',
 };
 
 export function getCategoryColor(category) {
