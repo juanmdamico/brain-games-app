@@ -27,6 +27,18 @@ import FlowFreePage from './pages/FlowFreePage';
 import TypingTestPage from './pages/TypingTestPage';
 import EntanglementPage from './pages/EntanglementPage';
 import FutoshikiPage from './pages/FutoshikiPage';
+import KillerSudokuPage from './pages/KillerSudokuPage';
+import NurikabePage from './pages/NurikabePage';
+import HashiPage from './pages/HashiPage';
+import AkariPage from './pages/AkariPage';
+import MasyuPage from './pages/MasyuPage';
+import StarBattlePage from './pages/StarBattlePage';
+import YinYangPage from './pages/YinYangPage';
+import AnagramPage from './pages/AnagramPage';
+import SpellingBeePage from './pages/SpellingBeePage';
+import KlondikePage from './pages/KlondikePage';
+import BlackjackPage from './pages/BlackjackPage';
+import ChessPuzzlesPage from './pages/ChessPuzzlesPage';
 import { AppProvider } from './context/AppContext';
 import AppLayout from './components/common/AppLayout';
 import './index.css';
@@ -64,6 +76,18 @@ function App() {
             <Route path="/testmecanografia" element={<TypingTestPage />} />
             <Route path="/entrelazamiento" element={<EntanglementPage />} />
             <Route path="/futoshiki" element={<FutoshikiPage />} />
+            <Route path="/killersudoku" element={<KillerSudokuPage />} />
+            <Route path="/nurikabe" element={<NurikabePage />} />
+            <Route path="/hashi" element={<HashiPage />} />
+            <Route path="/akari" element={<AkariPage />} />
+            <Route path="/masyu" element={<MasyuPage />} />
+            <Route path="/starbattle" element={<StarBattlePage />} />
+            <Route path="/yinyang" element={<YinYangPage />} />
+            <Route path="/anagrama" element={<AnagramPage />} />
+            <Route path="/spellingbee" element={<SpellingBeePage />} />
+            <Route path="/solitario" element={<KlondikePage />} />
+            <Route path="/blackjack" element={<BlackjackPage />} />
+            <Route path="/ajedrez" element={<ChessPuzzlesPage />} />
           </Routes>
         </AppLayout>
       </Router>

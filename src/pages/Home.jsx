@@ -31,7 +31,19 @@ const GAMES = [
     { to: "/lineascolores", icon: "🟢", title: "Líneas de Colores", category: "logic", description: "Conecta los puntos del mismo color dibujando líneas en el tablero sin cruzarlas." },
     { to: "/testmecanografia", icon: "⌨️", title: "Test de Teclado", category: "arcade", description: "Escribe el texto a toda velocidad en un minuto y mide tus palabras por minuto (WPM)." },
     { to: "/entrelazamiento", icon: "⚛️", title: "Enredo Cuántico", category: "logic", description: "Alinea las flechas rotándolas. Los nodos del mismo color están entrelazados cuánticamente." },
-    { to: "/futoshiki", icon: "🧮", title: "Futoshiki", category: "logic", description: "Acomoda los números del 1 al 4 respetando las desigualdades mayor y menor." }
+    { to: "/futoshiki", icon: "🧮", title: "Futoshiki", category: "logic", description: "Acomoda los números del 1 al 4 respetando las desigualdades mayor y menor." },
+    { to: "/killersudoku", icon: "🧮", title: "Killer Sudoku", category: "logic", description: "Completa el Sudoku 6x6 sumando las celdas agrupadas en jaulas punteadas." },
+    { to: "/nurikabe", icon: "🏝️", title: "Nurikabe", category: "logic", description: "Forma islas de tierra y canales de agua siguiendo las pistas numéricas de tamaño." },
+    { to: "/hashi", icon: "🌉", title: "Hashi", category: "logic", description: "Conecta las islas con puentes simples o dobles hasta completar los enlaces indicados." },
+    { to: "/akari", icon: "💡", title: "Akari", category: "logic", description: "Coloca bombillas de luz para iluminar todos los pasillos y celdas blancas del mapa." },
+    { to: "/masyu", icon: "⚪", title: "Masyu", category: "logic", description: "Enlaza perlas blancas y negras en un solo lazo continuo respetando sus reglas de giro." },
+    { to: "/starbattle", icon: "⭐", title: "Star Battle", category: "logic", description: "Ubica estrellas en la cuadrícula sin que se toquen y respetando filas, columnas y regiones." },
+    { to: "/yinyang", icon: "☯️", title: "Yin-Yang", category: "logic", description: "Agrupa círculos blancos y negros en redes continuas sin formar bloques 2x2." },
+    { to: "/anagrama", icon: "🔠", title: "Anagramas", category: "arcade", description: "Forma palabras válidas de 3 a 5 letras utilizando un juego de letras desordenadas." },
+    { to: "/spellingbee", icon: "🐝", title: "Spelling Bee", category: "arcade", description: "Crea palabras en un panal de abejas utilizando obligatoriamente la letra central." },
+    { to: "/solitario", icon: "🃏", title: "Solitario", category: "casual", description: "El clásico juego de cartas Klondike. Ordena la baraja del As al Rey." },
+    { to: "/blackjack", icon: "🎰", title: "Blackjack", category: "casual", description: "Desafía a la casa en el juego de cartas 21 sumando más puntos sin pasarte." },
+    { to: "/ajedrez", icon: "♟️", title: "Ajedrez Puzzles", category: "logic", description: "Resuelve problemas tácticos de ajedrez encontrando el jaque mate en un solo movimiento." }
 ];
 
 const Home = () => {

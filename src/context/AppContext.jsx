@@ -40,7 +40,19 @@ const GAMES_LIST = [
     { id: 'lineascolores', name: 'Líneas de Colores', path: '/lineascolores' },
     { id: 'testmecanografia', name: 'Test de Mecanografía', path: '/testmecanografia' },
     { id: 'entrelazamiento', name: 'Enredo Cuántico', path: '/entrelazamiento' },
-    { id: 'futoshiki', name: 'Futoshiki', path: '/futoshiki' }
+    { id: 'futoshiki', name: 'Futoshiki', path: '/futoshiki' },
+    { id: 'killersudoku', name: 'Killer Sudoku', path: '/killersudoku' },
+    { id: 'nurikabe', name: 'Nurikabe', path: '/nurikabe' },
+    { id: 'hashi', name: 'Hashi', path: '/hashi' },
+    { id: 'akari', name: 'Akari', path: '/akari' },
+    { id: 'masyu', name: 'Masyu', path: '/masyu' },
+    { id: 'starbattle', name: 'Star Battle', path: '/starbattle' },
+    { id: 'yinyang', name: 'Yin-Yang', path: '/yinyang' },
+    { id: 'anagrama', name: 'Anagramas', path: '/anagrama' },
+    { id: 'spellingbee', name: 'Spelling Bee', path: '/spellingbee' },
+    { id: 'solitario', name: 'Solitario', path: '/solitario' },
+    { id: 'blackjack', name: 'Blackjack', path: '/blackjack' },
+    { id: 'ajedrez_puzzles', name: 'Ajedrez Puzzles', path: '/ajedrez' }
 ];
 
 export const AppProvider = ({ children }) => {
