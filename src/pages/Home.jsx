@@ -43,7 +43,8 @@ const GAMES = [
     { to: "/spellingbee", icon: "🐝", title: "Spelling Bee", category: "arcade", description: "Crea palabras en un panal de abejas utilizando obligatoriamente la letra central." },
     { to: "/solitario", icon: "🃏", title: "Solitario", category: "casual", description: "El clásico juego de cartas Klondike. Ordena la baraja del As al Rey." },
     { to: "/blackjack", icon: "🎰", title: "Blackjack", category: "casual", description: "Desafía a la casa en el juego de cartas 21 sumando más puntos sin pasarte." },
-    { to: "/ajedrez", icon: "♟️", title: "Ajedrez Puzzles", category: "logic", description: "Resuelve problemas tácticos de ajedrez encontrando el jaque mate en un solo movimiento." }
+    { to: "/ajedrez", icon: "♟️", title: "Ajedrez Puzzles", category: "logic", description: "Resuelve problemas tácticos de ajedrez encontrando el jaque mate en un solo movimiento." },
+    { to: "/neuroscape", icon: "🔮", title: "Neuroscape RPG", category: "logic", description: "Enfréntate a bloqueos mentales resolviendo mini-puzzles lógicos en tiempo real para sobrevivir." }
 ];
 
 const Home = () => {

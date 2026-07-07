@@ -70,7 +70,8 @@ const GAMES_LIST = [
     { id: 'breakout', name: 'Breakout', path: '/breakout' },
     { id: 'audiopairs', name: 'Pares Auditivos', path: '/audiopairs' },
     { id: 'brainclicker', name: 'Brain Clicker', path: '/brainclicker' },
-    { id: 'buscaminas_duel', name: 'Duelo Buscaminas', path: '/buscaminasduel' }
+    { id: 'buscaminas_duel', name: 'Duelo Buscaminas', path: '/buscaminasduel' },
+    { id: 'neuroscape', name: 'Neuroscape RPG', path: '/neuroscape' }
 ];
 
 export const AppProvider = ({ children }) => {
