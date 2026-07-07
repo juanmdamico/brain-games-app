@@ -95,14 +95,14 @@ const EarthLayersPage = () => {
                   const isExosphere = layer.id === 'exosphere';
                   const baseStyle = {
                       position: 'absolute',
-                      width: \`\${layer.radius * 2}px\`,
-                      height: \`\${layer.radius * 2}px\`,
+                      width: `${layer.radius * 2}px`,
+                      height: `${layer.radius * 2}px`,
                       borderRadius: '50%',
                       backgroundColor: isExosphere ? 'transparent' : layer.color,
-                      border: isExosphere ? \`2px dashed \${layer.color}\` : \`2px solid \${isHovered ? 'white' : 'rgba(0,0,0,0.2)'}\`,
+                      border: isExosphere ? `2px dashed ${layer.color}` : `2px solid ${isHovered ? 'white' : 'rgba(0,0,0,0.2)'}`,
                       cursor: 'pointer',
                       transition: 'all 0.3s ease',
-                      boxShadow: isHovered && !isExosphere ? \`0 0 20px \${layer.color}, inset 0 0 20px rgba(255,255,255,0.4)\` : 'none',
+                      boxShadow: isHovered && !isExosphere ? `0 0 20px ${layer.color}, inset 0 0 20px rgba(255,255,255,0.4)` : 'none',
                       transform: isHovered ? 'scale(1.02)' : 'scale(1)',
                       zIndex: layer.radius > 200 ? 1 : 10 // push atmosphere layers behind
                   };
@@ -127,13 +127,13 @@ const EarthLayersPage = () => {
           <div style={{
               background: 'rgba(30, 41, 59, 0.7)',
               backdropFilter: 'blur(12px)',
-              border: \`2px solid \${activeLayer.color}55\`,
+              border: `2px solid ${activeLayer.color}55`,
               borderRadius: '24px',
               padding: '30px',
               maxWidth: '450px',
               width: '100%',
               minHeight: '400px',
-              boxShadow: \`0 20px 40px rgba(0,0,0,0.3), 0 0 20px \${activeLayer.color}11\`,
+              boxShadow: `0 20px 40px rgba(0,0,0,0.3), 0 0 20px ${activeLayer.color}11`,
               transition: 'border-color 0.3s',
               display: 'flex',
               flexDirection: 'column'
