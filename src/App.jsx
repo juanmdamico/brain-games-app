@@ -61,6 +61,9 @@ import NeuroscapePage from './pages/NeuroscapePage';
 import PeriodicTablePage from './pages/PeriodicTablePage';
 import SolarSystemPage from './pages/SolarSystemPage';
 import EarthLayersPage from './pages/EarthLayersPage';
+import TimelinePage from './pages/TimelinePage';
+import WorldAtlasPage from './pages/WorldAtlasPage';
+import AnatomyPage from './pages/AnatomyPage';
 import { AppProvider } from './context/AppContext';
 import AppLayout from './components/common/AppLayout';
 import './index.css';
@@ -132,6 +135,9 @@ function App() {
             <Route path="/tablaperiodica" element={<PeriodicTablePage />} />
             <Route path="/sistemasolar" element={<SolarSystemPage />} />
             <Route path="/capastierra" element={<EarthLayersPage />} />
+            <Route path="/lineatiempo" element={<TimelinePage />} />
+            <Route path="/atlas" element={<WorldAtlasPage />} />
+            <Route path="/anatomia" element={<AnatomyPage />} />
           </Routes>
         </AppLayout>
       </Router>

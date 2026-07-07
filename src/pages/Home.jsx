@@ -47,7 +47,10 @@ const GAMES = [
     { to: "/neuroscape", icon: "🔮", title: "Neuroscape RPG", category: "logic", description: "Enfréntate a bloqueos mentales resolviendo mini-puzzles lógicos en tiempo real para sobrevivir." },
     { to: "/tablaperiodica", icon: "🧪", title: "Tabla Periódica", category: "educational", description: "Explora los elementos químicos, sus fases, masas y propiedades en esta tabla interactiva." },
     { to: "/sistemasolar", icon: "🪐", title: "Sistema Solar", category: "educational", description: "Navega por nuestro vecindario cósmico interactivo y descubre datos asombrosos sobre cada planeta." },
-    { to: "/capastierra", icon: "🌋", title: "Capas de la Tierra", category: "educational", description: "Viaja desde la corteza terrestre hasta el núcleo ardiente y luego sube hasta el espacio." }
+    { to: "/capastierra", icon: "🌋", title: "Capas de la Tierra", category: "educational", description: "Viaja desde la corteza terrestre hasta el núcleo ardiente y luego sube hasta el espacio." },
+    { to: "/lineatiempo", icon: "⏳", title: "Línea de Tiempo", category: "educational", description: "Viaja a través de un túnel 3D para descubrir los eventos que marcaron la historia de la humanidad." },
+    { to: "/atlas", icon: "🗺️", title: "Atlas Mundial", category: "educational", description: "Gira el globo terráqueo 3D y explora la geografía, países y culturas del mundo." },
+    { to: "/anatomia", icon: "🧠", title: "Cuerpo Humano", category: "educational", description: "Explora los sistemas biológicos interactivos y descubre cómo funciona tu propio cuerpo." }
 ];
 
 const Home = () => {

@@ -1,0 +1,17 @@
+export const timelineData = [
+  { id: 'fire', year: -400000, title: 'Dominio del Fuego', category: 'Tecnología', color: '#f97316', description: 'El Homo erectus aprende a controlar el fuego, cambiando la dieta, la protección contra depredadores y la expansión territorial.' },
+  { id: 'agriculture', year: -10000, title: 'Revolución Agrícola', category: 'Sociedad', color: '#84cc16', description: 'Transición de la caza y recolección a la agricultura y el establecimiento de los primeros asentamientos permanentes.' },
+  { id: 'writing', year: -3200, title: 'Invención de la Escritura', category: 'Cultura', color: '#eab308', description: 'Los sumerios en Mesopotamia desarrollan la escritura cuneiforme, marcando el inicio de la historia registrada.' },
+  { id: 'pyramids', year: -2560, title: 'Pirámides de Giza', category: 'Arquitectura', color: '#d97706', description: 'Construcción de la Gran Pirámide en Egipto, la maravilla del mundo antiguo que más ha perdurado.' },
+  { id: 'rome', year: -27, title: 'Imperio Romano', category: 'Imperio', color: '#ef4444', description: 'Augusto se convierte en el primer emperador romano, iniciando siglos de expansión, ingeniería y derecho.' },
+  { id: 'printing', year: 1440, title: 'La Imprenta', category: 'Tecnología', color: '#3b82f6', description: 'Johannes Gutenberg inventa la imprenta de tipos móviles, revolucionando la difusión del conocimiento y la alfabetización.' },
+  { id: 'america', year: 1492, title: 'Llegada a América', category: 'Exploración', color: '#06b6d4', description: 'Cristóbal Colón llega al continente americano, conectando dos mundos y cambiando la historia global para siempre.' },
+  { id: 'science', year: 1687, title: 'Revolución Científica', category: 'Ciencia', color: '#8b5cf6', description: 'Isaac Newton publica los "Principia Mathematica", sentando las bases de la física y la mecánica clásica.' },
+  { id: 'industrial', year: 1760, title: 'Revolución Industrial', category: 'Sociedad', color: '#64748b', description: 'Inicio de la transición a nuevos procesos de fabricación impulsados por vapor en Gran Bretaña.' },
+  { id: 'flight', year: 1903, title: 'Primer Vuelo', category: 'Tecnología', color: '#0ea5e9', description: 'Los hermanos Wright realizan el primer vuelo sostenido y controlado en un aeroplano con motor.' },
+  { id: 'ww2', year: 1945, title: 'Fin de la 2ª Guerra Mundial', category: 'Sociedad', color: '#dc2626', description: 'Finaliza el mayor conflicto global de la historia, dándose lugar a la fundación de las Naciones Unidas.' },
+  { id: 'moon', year: 1969, title: 'Llegada a la Luna', category: 'Exploración', color: '#f1f5f9', description: 'La misión Apolo 11 de la NASA lleva a Neil Armstrong y Buzz Aldrin a ser los primeros humanos en caminar sobre la Luna.' },
+  { id: 'internet', year: 1989, title: 'Invención de la WWW', category: 'Tecnología', color: '#10b981', description: 'Tim Berners-Lee inventa la World Wide Web, creando la red de información interconectada que usamos hoy.' },
+  { id: 'smartphone', year: 2007, title: 'Era del Smartphone', category: 'Tecnología', color: '#a855f7', description: 'Lanzamiento del primer iPhone, revolucionando la computación móvil y la conectividad permanente.' },
+  { id: 'ai', year: 2022, title: 'Revolución de la IA', category: 'Tecnología', color: '#ec4899', description: 'El lanzamiento masivo de grandes modelos de lenguaje generativos marca el inicio de una nueva era de asistencia cognitiva.' },
+];
