@@ -1,29 +1,142 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Info, Mountain } from 'lucide-react';
+import { Info, Mountain, RefreshCw } from 'lucide-react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Stars, Html, Float } from '@react-three/drei';
+import * as THREE from 'three';
 import { earthLayersData } from '../data/earthLayersData';
 import InstructionsModal from '../components/common/InstructionsModal';
 
-const EarthLayersPage = () => {
-  const [hoveredLayer, setHoveredLayer] = useState(null);
-  const [showInstructions, setShowInstructions] = useState(false);
+// --- 3D Components ---
 
-  // We want to draw them from largest radius to smallest, 
-  // so the smaller circles render on top.
-  const layersToDraw = [...earthLayersData].reverse();
+const EarthSlice = ({ layer, isHovered, onHover, onClick, active }) => {
+  const meshRef = useRef();
+
+  // We scale the radii down so it fits nicely
+  // Radii go from 40 to 400. Let's divide by 10.
+  const radius = layer.radius / 15;
   
-  // The selected layer to show in the info box
-  const activeLayer = hoveredLayer || earthLayersData[3]; // Default to Crust (Tierra) if none hovered
+  // Cut out a slice (1/4 of the sphere)
+  const phiStart = 0;
+  const phiLength = Math.PI * 1.5;
+
+  // Visual tweaks based on layer
+  const isAtmosphere = layer.radius > 200;
+  const isCore = layer.id.includes('core');
+  
+  return (
+    <mesh 
+      ref={meshRef}
+      onPointerOver={(e) => { e.stopPropagation(); onHover(layer); document.body.style.cursor = 'pointer'; }}
+      onPointerOut={(e) => { document.body.style.cursor = 'auto'; }}
+      onClick={(e) => { e.stopPropagation(); onClick(layer); }}
+    >
+      <sphereGeometry args={[radius, 64, 64, phiStart, phiLength]} />
+      
+      {isCore ? (
+         // Core emits light and is very bright
+         <meshStandardMaterial 
+            color={layer.color} 
+            emissive={layer.color}
+            emissiveIntensity={isHovered || active ? 0.8 : 0.4}
+            side={THREE.DoubleSide}
+         />
+      ) : isAtmosphere ? (
+         // Atmosphere is transparent and ghostly
+         <meshStandardMaterial 
+            color={layer.color} 
+            transparent 
+            opacity={isHovered || active ? 0.4 : 0.1}
+            side={THREE.DoubleSide}
+            depthWrite={false}
+         />
+      ) : (
+         // Crust and Mantle
+         <meshStandardMaterial 
+            color={layer.color} 
+            roughness={0.8}
+            metalness={0.1}
+            side={THREE.DoubleSide}
+            emissive={isHovered || active ? layer.color : '#000000'}
+            emissiveIntensity={isHovered || active ? 0.2 : 0}
+         />
+      )}
+
+      {/* Label for the cut face */}
+      {(isHovered || active) && !isAtmosphere && (
+          <Html position={[radius + 0.5, 0, 0]} center>
+              <div style={{
+                  color: layer.color,
+                  fontWeight: 'bold',
+                  textShadow: '0 0 5px black',
+                  pointerEvents: 'none',
+                  whiteSpace: 'nowrap',
+                  fontSize: '0.85rem',
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  padding: '2px 6px',
+                  borderRadius: '4px',
+                  border: `1px solid ${layer.color}55`
+              }}>
+                  {layer.name}
+              </div>
+          </Html>
+      )}
+    </mesh>
+  );
+};
+
+const EarthModel = ({ activeLayer, setActiveLayer, hoveredLayer, setHoveredLayer }) => {
+  const groupRef = useRef();
+  
+  useFrame(() => {
+    // Slowly rotate the whole earth cutaway
+    groupRef.current.rotation.y += 0.002;
+    groupRef.current.rotation.x = 0.2; // slight tilt
+  });
+
+  // Reverse so outer layers render first (better for transparency)
+  const layers = [...earthLayersData].reverse();
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '20px', overflow: 'hidden' }}>
-      <div className="background-effects">
-        <div className="glow-orb orb-1" style={{ opacity: 0.2 }}></div>
-        <div className="glow-orb orb-2" style={{ opacity: 0.2 }}></div>
-      </div>
+    <group ref={groupRef}>
+      {/* Light coming from the core */}
+      <pointLight color="#fef08a" intensity={2} distance={30} decay={1.5} />
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[10, 10, 10]} intensity={1} />
 
-      {/* Header */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', position: 'relative', zIndex: 10 }}>
+      {layers.map((layer) => (
+         <EarthSlice 
+            key={layer.id} 
+            layer={layer} 
+            isHovered={hoveredLayer?.id === layer.id}
+            active={activeLayer?.id === layer.id}
+            onHover={setHoveredLayer}
+            onClick={setActiveLayer}
+         />
+      ))}
+    </group>
+  );
+};
+
+// --- Main Page Component ---
+
+const EarthLayersPage = () => {
+  const [hoveredLayer, setHoveredLayer] = useState(null);
+  const [selectedLayer, setSelectedLayer] = useState(earthLayersData[3]); // Default Crust
+  const [showInstructions, setShowInstructions] = useState(false);
+
+  const activeLayer = hoveredLayer || selectedLayer;
+
+  return (
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', backgroundColor: '#020617' }}>
+      
+      {/* Header Overlay */}
+      <header style={{ 
+          position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10,
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
+          padding: '20px',
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%)'
+      }}>
         <Link 
             to="/" 
             style={{ 
@@ -36,14 +149,15 @@ const EarthLayersPage = () => {
                 padding: '8px 16px',
                 background: 'rgba(255,255,255,0.05)',
                 borderRadius: '8px',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
+                backdropFilter: 'blur(5px)'
             }}
         >
             ← Volver
         </Link>
         
         <h1 style={{ color: 'white', margin: 0, fontSize: '1.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Mountain color="#65a30d" /> Capas de la Tierra
+            <Mountain color="#65a30d" /> Capas de la Tierra 3D
         </h1>
         
         <button 
@@ -58,83 +172,56 @@ const EarthLayersPage = () => {
                 justifyContent: 'center',
                 padding: '10px',
                 borderRadius: '50%',
-                transition: 'background 0.2s'
+                backdropFilter: 'blur(5px)'
             }}
         >
             <Info size={24} />
         </button>
       </header>
 
-      {/* Main Container */}
-      <div style={{ 
-          flex: 1, 
-          display: 'flex', 
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '50px',
-          marginTop: '20px',
-          position: 'relative'
-      }}>
+      {/* Split layout: 3D Canvas on the left, UI Panel on the right */}
+      <div style={{ flex: 1, display: 'flex', position: 'relative', marginTop: '60px' }}>
+          
+          {/* 3D Canvas */}
+          <div style={{ flex: 1, position: 'relative' }}>
+              <Canvas camera={{ position: [0, 0, 35], fov: 45 }}>
+                 <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
+                 
+                 <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
+                    <EarthModel 
+                        activeLayer={selectedLayer} 
+                        setActiveLayer={setSelectedLayer}
+                        hoveredLayer={hoveredLayer}
+                        setHoveredLayer={setHoveredLayer}
+                    />
+                 </Float>
 
-          {/* Interactive Concentric Diagram Area */}
-          <div style={{ 
-              position: 'relative', 
-              width: '500px', 
-              height: '500px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexShrink: 0
-          }}>
-              {layersToDraw.map((layer) => {
-                  const isHovered = hoveredLayer?.id === layer.id;
-                  
-                  // For the exosphere, we make it look like space
-                  const isExosphere = layer.id === 'exosphere';
-                  const baseStyle = {
-                      position: 'absolute',
-                      width: `${layer.radius * 2}px`,
-                      height: `${layer.radius * 2}px`,
-                      borderRadius: '50%',
-                      backgroundColor: isExosphere ? 'transparent' : layer.color,
-                      border: isExosphere ? `2px dashed ${layer.color}` : `2px solid ${isHovered ? 'white' : 'rgba(0,0,0,0.2)'}`,
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      boxShadow: isHovered && !isExosphere ? `0 0 20px ${layer.color}, inset 0 0 20px rgba(255,255,255,0.4)` : 'none',
-                      transform: isHovered ? 'scale(1.02)' : 'scale(1)',
-                      zIndex: layer.radius > 200 ? 1 : 10 // push atmosphere layers behind
-                  };
-
-                  return (
-                      <div 
-                        key={layer.id}
-                        onMouseEnter={() => setHoveredLayer(layer)}
-                        onMouseLeave={() => setHoveredLayer(null)}
-                        style={baseStyle}
-                      />
-                  );
-              })}
-
-              {/* A small static label in the center */}
-              <div style={{ position: 'absolute', pointerEvents: 'none', color: '#000', fontWeight: 'bold', zIndex: 100, fontSize: '0.8rem', textAlign: 'center' }}>
-                  Núcleo
-              </div>
+                 <OrbitControls 
+                     enablePan={false}
+                     enableZoom={true}
+                     enableRotate={true}
+                     minDistance={5}
+                     maxDistance={60}
+                     autoRotate={false}
+                 />
+              </Canvas>
           </div>
 
-          {/* Info Box */}
+          {/* Info Panel (Overlay on right side) */}
           <div style={{
-              background: 'rgba(30, 41, 59, 0.7)',
-              backdropFilter: 'blur(12px)',
-              border: `2px solid ${activeLayer.color}55`,
+              position: 'absolute',
+              right: '40px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'rgba(15, 23, 42, 0.85)',
+              backdropFilter: 'blur(16px)',
+              border: `1px solid ${activeLayer.color}55`,
               borderRadius: '24px',
               padding: '30px',
-              maxWidth: '450px',
-              width: '100%',
-              minHeight: '400px',
-              boxShadow: `0 20px 40px rgba(0,0,0,0.3), 0 0 20px ${activeLayer.color}11`,
-              transition: 'border-color 0.3s',
+              width: '400px',
+              boxShadow: `0 20px 40px rgba(0,0,0,0.5), 0 0 30px ${activeLayer.color}22`,
+              transition: 'border-color 0.3s, box-shadow 0.3s',
+              zIndex: 10,
               display: 'flex',
               flexDirection: 'column'
           }}>
@@ -143,12 +230,13 @@ const EarthLayersPage = () => {
                       width: '24px', height: '24px', 
                       backgroundColor: activeLayer.id === 'exosphere' ? 'transparent' : activeLayer.color,
                       border: activeLayer.id === 'exosphere' ? '2px dashed white' : 'none',
-                      borderRadius: '50%' 
+                      borderRadius: '50%',
+                      boxShadow: `0 0 10px ${activeLayer.color}`
                   }} />
-                  <h2 style={{ fontSize: '2rem', margin: 0, color: 'white' }}>{activeLayer.name}</h2>
+                  <h2 style={{ fontSize: '1.8rem', margin: 0, color: 'white' }}>{activeLayer.name}</h2>
               </div>
 
-              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '30px', flex: 1 }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '30px', flex: 1 }}>
                   {activeLayer.description}
               </p>
 
@@ -156,38 +244,39 @@ const EarthLayersPage = () => {
                   display: 'grid', 
                   gridTemplateColumns: '1fr 1fr', 
                   gap: '15px', 
-                  backgroundColor: 'rgba(0,0,0,0.2)',
+                  backgroundColor: 'rgba(0,0,0,0.3)',
                   padding: '20px',
-                  borderRadius: '16px'
+                  borderRadius: '16px',
+                  border: '1px solid rgba(255,255,255,0.05)'
               }}>
                   <div>
-                      <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Profundidad/Altura</span>
-                      <strong style={{ color: 'white', fontSize: '1.1rem' }}>{activeLayer.depth}</strong>
+                      <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Profundidad</span>
+                      <strong style={{ color: 'white', fontSize: '1rem' }}>{activeLayer.depth}</strong>
                   </div>
                   <div>
-                      <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Grosor</span>
-                      <strong style={{ color: 'white', fontSize: '1.1rem' }}>{activeLayer.thickness}</strong>
+                      <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Grosor</span>
+                      <strong style={{ color: 'white', fontSize: '1rem' }}>{activeLayer.thickness}</strong>
                   </div>
                   <div style={{ gridColumn: '1 / -1' }}>
-                      <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Temperatura</span>
-                      <strong style={{ color: '#fb923c', fontSize: '1.1rem' }}>{activeLayer.temperature}</strong>
+                      <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Temperatura</span>
+                      <strong style={{ color: '#fb923c', fontSize: '1rem' }}>{activeLayer.temperature}</strong>
                   </div>
                   <div style={{ gridColumn: '1 / -1' }}>
-                      <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Composición</span>
-                      <strong style={{ color: 'white', fontSize: '1rem' }}>{activeLayer.composition}</strong>
+                      <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Composición</span>
+                      <strong style={{ color: 'white', fontSize: '0.95rem' }}>{activeLayer.composition}</strong>
                   </div>
               </div>
           </div>
-
       </div>
 
       {showInstructions && (
         <InstructionsModal
-          title="Explorador de Capas Terrestres"
+          title="Explorador 3D de Capas Terrestres"
           instructions={[
-            "Pasa el ratón (o toca) sobre los diferentes círculos concéntricos.",
-            "Cada círculo representa una capa real de la Tierra, desde su ardiente núcleo interno hasta el vacío del espacio exterior en la exosfera.",
-            "A la derecha podrás ver los datos detallados de composición, grosor y temperatura de la capa que estés señalando."
+            "Ahora estás viendo la Tierra en 3D con un corte transversal interactivo.",
+            "Pasa el ratón sobre las diferentes capas y atmósferas para resaltarlas.",
+            "Haz clic y arrastra para rotar la cámara. Usa la rueda del ratón para hacer zoom hacia el núcleo ardiente.",
+            "A la derecha podrás ver los datos detallados de cada capa seleccionada."
           ]}
           onClose={() => setShowInstructions(false)}
         />
