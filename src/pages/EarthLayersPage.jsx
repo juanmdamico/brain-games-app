@@ -15,13 +15,20 @@ const EarthSlice = ({ layer, isHovered, onHover, onClick, active }) => {
   // We scale the radii down so it fits nicely
   // Radii go from 40 to 400. Let's divide by 10.
   const radius = layer.radius / 15;
+  const isAtmosphere = layer.radius > 200;
   
-  // Cut out a slice (1/4 of the sphere)
+  // Create a staggered "stair-step" cutaway view
   const phiStart = 0;
-  const phiLength = Math.PI * 1.5;
+  let phiLength = Math.PI * 2; // Full sphere by default
+  
+  if (!isAtmosphere) {
+      if (layer.id === 'crust') phiLength = Math.PI * 1.2;
+      else if (layer.id === 'mantle') phiLength = Math.PI * 1.45;
+      else if (layer.id === 'outer-core') phiLength = Math.PI * 1.7;
+      else if (layer.id === 'inner-core') phiLength = Math.PI * 2.0;
+  }
 
   // Visual tweaks based on layer
-  const isAtmosphere = layer.radius > 200;
   const isCore = layer.id.includes('core');
   
   return (
