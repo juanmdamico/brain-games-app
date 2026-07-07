@@ -45,7 +45,9 @@ const GAMES = [
     { to: "/blackjack", icon: "🎰", title: "Blackjack", category: "casual", description: "Desafía a la casa en el juego de cartas 21 sumando más puntos sin pasarte." },
     { to: "/ajedrez", icon: "♟️", title: "Ajedrez Puzzles", category: "logic", description: "Resuelve problemas tácticos de ajedrez encontrando el jaque mate en un solo movimiento." },
     { to: "/neuroscape", icon: "🔮", title: "Neuroscape RPG", category: "logic", description: "Enfréntate a bloqueos mentales resolviendo mini-puzzles lógicos en tiempo real para sobrevivir." },
-    { to: "/tablaperiodica", icon: "🧪", title: "Tabla Periódica", category: "educational", description: "Explora los elementos químicos, sus fases, masas y propiedades en esta tabla interactiva." }
+    { to: "/tablaperiodica", icon: "🧪", title: "Tabla Periódica", category: "educational", description: "Explora los elementos químicos, sus fases, masas y propiedades en esta tabla interactiva." },
+    { to: "/sistemasolar", icon: "🪐", title: "Sistema Solar", category: "educational", description: "Navega por nuestro vecindario cósmico interactivo y descubre datos asombrosos sobre cada planeta." },
+    { to: "/capastierra", icon: "🌋", title: "Capas de la Tierra", category: "educational", description: "Viaja desde la corteza terrestre hasta el núcleo ardiente y luego sube hasta el espacio." }
 ];
 
 const Home = () => {
