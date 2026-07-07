@@ -148,7 +148,8 @@ const SolarSystemPage = () => {
                             borderRadius: '50%',
                             animation: `orbit-rotate ${planet.orbitSpeed}s linear infinite`,
                             animationPlayState: isPaused ? 'paused' : 'running',
-                            zIndex: 1
+                            zIndex: 1,
+                            pointerEvents: 'none'
                         }}
                     >
                         {/* The Planet itself */}
@@ -168,7 +169,8 @@ const SolarSystemPage = () => {
                                 boxShadow: `inset -2px -2px 6px rgba(0,0,0,0.5), 0 0 10px ${planet.color}88`,
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
+                                pointerEvents: 'auto'
                             }}
                         >
                             {/* Rings (for Saturn) */}
@@ -317,6 +319,9 @@ const SolarSystemPage = () => {
         @keyframes orbit-rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
+        }
+        .solar-system-container:hover .orbit {
+            animation-play-state: paused !important;
         }
         .planet:hover .planet-tooltip {
             opacity: 1 !important;
