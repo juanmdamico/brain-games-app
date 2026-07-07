@@ -39,6 +39,24 @@ import SpellingBeePage from './pages/SpellingBeePage';
 import KlondikePage from './pages/KlondikePage';
 import BlackjackPage from './pages/BlackjackPage';
 import ChessPuzzlesPage from './pages/ChessPuzzlesPage';
+import KuromasuPage from './pages/KuromasuPage';
+import ShikakuPage from './pages/ShikakuPage';
+import CheckersPage from './pages/CheckersPage';
+import ReversiPage from './pages/ReversiPage';
+import GomokuPage from './pages/GomokuPage';
+import BattleshipPage from './pages/BattleshipPage';
+import MahjongPage from './pages/MahjongPage';
+import SpiderPage from './pages/SpiderPage';
+import FreeCellPage from './pages/FreeCellPage';
+import VideoPokerPage from './pages/VideoPokerPage';
+import BlockPuzzlePage from './pages/BlockPuzzlePage';
+import RushHourPage from './pages/RushHourPage';
+import PlumberPage from './pages/PlumberPage';
+import PacmanPage from './pages/PacmanPage';
+import BreakoutPage from './pages/BreakoutPage';
+import AudioPairsPage from './pages/AudioPairsPage';
+import BrainClickerPage from './pages/BrainClickerPage';
+import MinesweeperDuelPage from './pages/MinesweeperDuelPage';
 import { AppProvider } from './context/AppContext';
 import AppLayout from './components/common/AppLayout';
 import './index.css';
@@ -88,6 +106,24 @@ function App() {
             <Route path="/solitario" element={<KlondikePage />} />
             <Route path="/blackjack" element={<BlackjackPage />} />
             <Route path="/ajedrez" element={<ChessPuzzlesPage />} />
+            <Route path="/kuromasu" element={<KuromasuPage />} />
+            <Route path="/shikaku" element={<ShikakuPage />} />
+            <Route path="/damas" element={<CheckersPage />} />
+            <Route path="/reversi" element={<ReversiPage />} />
+            <Route path="/gomoku" element={<GomokuPage />} />
+            <Route path="/battleship" element={<BattleshipPage />} />
+            <Route path="/mahjong" element={<MahjongPage />} />
+            <Route path="/spider" element={<SpiderPage />} />
+            <Route path="/freecell" element={<FreeCellPage />} />
+            <Route path="/videopoker" element={<VideoPokerPage />} />
+            <Route path="/blockpuzzle" element={<BlockPuzzlePage />} />
+            <Route path="/rushhour" element={<RushHourPage />} />
+            <Route path="/plumber" element={<PlumberPage />} />
+            <Route path="/pacman" element={<PacmanPage />} />
+            <Route path="/breakout" element={<BreakoutPage />} />
+            <Route path="/audiopairs" element={<AudioPairsPage />} />
+            <Route path="/brainclicker" element={<BrainClickerPage />} />
+            <Route path="/buscaminasduel" element={<MinesweeperDuelPage />} />
           </Routes>
         </AppLayout>
       </Router>

@@ -52,7 +52,25 @@ const GAMES_LIST = [
     { id: 'spellingbee', name: 'Spelling Bee', path: '/spellingbee' },
     { id: 'solitario', name: 'Solitario', path: '/solitario' },
     { id: 'blackjack', name: 'Blackjack', path: '/blackjack' },
-    { id: 'ajedrez_puzzles', name: 'Ajedrez Puzzles', path: '/ajedrez' }
+    { id: 'ajedrez_puzzles', name: 'Ajedrez Puzzles', path: '/ajedrez' },
+    { id: 'kuromasu', name: 'Kuromasu', path: '/kuromasu' },
+    { id: 'shikaku', name: 'Shikaku', path: '/shikaku' },
+    { id: 'damas', name: 'Damas', path: '/damas' },
+    { id: 'reversi', name: 'Reversi', path: '/reversi' },
+    { id: 'gomoku', name: 'Gomoku', path: '/gomoku' },
+    { id: 'battleship', name: 'Batalla Naval', path: '/battleship' },
+    { id: 'mahjong', name: 'Mahjong', path: '/mahjong' },
+    { id: 'spider', name: 'Solitario Spider', path: '/spider' },
+    { id: 'freecell', name: 'Carta Blanca', path: '/freecell' },
+    { id: 'videopoker', name: 'Video Poker', path: '/videopoker' },
+    { id: 'blockpuzzle', name: 'Bloques', path: '/blockpuzzle' },
+    { id: 'rushhour', name: 'Rush Hour', path: '/rushhour' },
+    { id: 'plumber', name: 'Tuberías', path: '/plumber' },
+    { id: 'pacman', name: 'Pac-Man', path: '/pacman' },
+    { id: 'breakout', name: 'Breakout', path: '/breakout' },
+    { id: 'audiopairs', name: 'Pares Auditivos', path: '/audiopairs' },
+    { id: 'brainclicker', name: 'Brain Clicker', path: '/brainclicker' },
+    { id: 'buscaminas_duel', name: 'Duelo Buscaminas', path: '/buscaminasduel' }
 ];
 
 export const AppProvider = ({ children }) => {
