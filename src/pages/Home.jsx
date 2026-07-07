@@ -44,7 +44,8 @@ const GAMES = [
     { to: "/solitario", icon: "🃏", title: "Solitario", category: "casual", description: "El clásico juego de cartas Klondike. Ordena la baraja del As al Rey." },
     { to: "/blackjack", icon: "🎰", title: "Blackjack", category: "casual", description: "Desafía a la casa en el juego de cartas 21 sumando más puntos sin pasarte." },
     { to: "/ajedrez", icon: "♟️", title: "Ajedrez Puzzles", category: "logic", description: "Resuelve problemas tácticos de ajedrez encontrando el jaque mate en un solo movimiento." },
-    { to: "/neuroscape", icon: "🔮", title: "Neuroscape RPG", category: "logic", description: "Enfréntate a bloqueos mentales resolviendo mini-puzzles lógicos en tiempo real para sobrevivir." }
+    { to: "/neuroscape", icon: "🔮", title: "Neuroscape RPG", category: "logic", description: "Enfréntate a bloqueos mentales resolviendo mini-puzzles lógicos en tiempo real para sobrevivir." },
+    { to: "/tablaperiodica", icon: "🧪", title: "Tabla Periódica", category: "educational", description: "Explora los elementos químicos, sus fases, masas y propiedades en esta tabla interactiva." }
 ];
 
 const Home = () => {
@@ -437,7 +438,8 @@ const Home = () => {
                           { id: 'all', label: 'Todos' },
                           { id: 'logic', label: 'Lógica' },
                           { id: 'arcade', label: 'Arcade/Letras' },
-                          { id: 'casual', label: 'Memoria/Mesa' }
+                          { id: 'casual', label: 'Memoria/Mesa' },
+                          { id: 'educational', label: 'Educacional' }
                       ].map(tab => (
                           <button
                               key={tab.id}
@@ -465,7 +467,8 @@ const Home = () => {
                   const categories = [
                       { id: 'logic', name: 'Lógica y Grilla', icon: '🧠', color: '#60a5fa' },
                       { id: 'arcade', name: 'Arcade y Letras', icon: '🕹️', color: '#f472b6' },
-                      { id: 'casual', name: 'Memoria y Mesa', icon: '🎴', color: '#fbbf24' }
+                      { id: 'casual', name: 'Memoria y Mesa', icon: '🎴', color: '#fbbf24' },
+                      { id: 'educational', name: 'Educacional', icon: '📚', color: '#10b981' }
                   ];
 
                   const activeCategories = filter === 'all' 

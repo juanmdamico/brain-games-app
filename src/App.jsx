@@ -58,6 +58,7 @@ import AudioPairsPage from './pages/AudioPairsPage';
 import BrainClickerPage from './pages/BrainClickerPage';
 import MinesweeperDuelPage from './pages/MinesweeperDuelPage';
 import NeuroscapePage from './pages/NeuroscapePage';
+import PeriodicTablePage from './pages/PeriodicTablePage';
 import { AppProvider } from './context/AppContext';
 import AppLayout from './components/common/AppLayout';
 import './index.css';
@@ -126,6 +127,7 @@ function App() {
             <Route path="/brainclicker" element={<BrainClickerPage />} />
             <Route path="/buscaminasduel" element={<MinesweeperDuelPage />} />
             <Route path="/neuroscape" element={<NeuroscapePage />} />
+            <Route path="/tablaperiodica" element={<PeriodicTablePage />} />
           </Routes>
         </AppLayout>
       </Router>
