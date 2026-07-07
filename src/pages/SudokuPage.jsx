@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { HelpCircle } from 'lucide-react';
-import Board from '../components/Sudoku/Board';
+import Board3D from '../components/Sudoku/Board3D';
 import GameControls from '../components/common/GameControls';
 import Timer from '../components/common/Timer';
 import InstructionsModal from '../components/common/InstructionsModal';
@@ -223,13 +223,14 @@ const SudokuPage = () => {
           </button>
         </header>
 
-        <div className="board-container" style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-          <Board 
+        <div className="board-container" style={{ position: 'relative', width: '100%', height: '500px', marginBottom: '24px', borderRadius: '16px', overflow: 'hidden', backgroundColor: 'transparent' }}>
+          <Board3D 
             board={board} 
             initialBoard={initialBoard}
             selectedCell={selectedCell}
             onCellClick={handleCellClick}
             errors={errors}
+            isVictory={showVictory}
           />
         </div>
 
