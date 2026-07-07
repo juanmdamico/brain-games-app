@@ -459,47 +459,79 @@ const Home = () => {
                   </div>
               </div>
 
-              {/* Game Cards Grid */}
-              <div style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-                  gap: '24px',
-                  paddingBottom: '40px'
-              }}>
-                  {filteredGames.map((game, index) => {
-                      const gameId = game.to.replace('/', '');
-                      const recordKey = `${gameId}_medium`;
-                      const bestTime = records[recordKey]?.[0];
+              {/* Game Cards Grouped by Category */}
+              {(() => {
+                  const categories = [
+                      { id: 'logic', name: 'Lógica y Grilla', icon: '🧠', color: '#60a5fa' },
+                      { id: 'arcade', name: 'Arcade y Letras', icon: '🕹️', color: '#f472b6' },
+                      { id: 'casual', name: 'Memoria y Mesa', icon: '🎴', color: '#fbbf24' }
+                  ];
+
+                  const activeCategories = filter === 'all' 
+                      ? categories 
+                      : categories.filter(c => c.id === filter);
+
+                  return activeCategories.map(cat => {
+                      const catGames = GAMES.filter(g => g.category === cat.id);
+                      if (catGames.length === 0) return null;
 
                       return (
-                          <div key={index} style={{ position: 'relative' }}>
-                              <GameCard 
-                                  to={game.to}
-                                  icon={game.icon}
-                                  title={game.title}
-                                  description={game.description}
-                              />
-                              {bestTime && (
-                                  <div style={{
-                                      position: 'absolute',
-                                      bottom: '12px',
-                                      right: '16px',
-                                      fontSize: '0.75rem',
-                                      color: '#60a5fa',
-                                      backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                                      padding: '2px 8px',
-                                      borderRadius: '8px',
-                                      border: '1px solid rgba(59, 130, 246, 0.2)',
-                                      fontWeight: 'bold',
-                                      pointerEvents: 'none'
-                                  }}>
-                                      ⏱️ Récord: {formatTime(bestTime)}
-                                  </div>
-                              )}
+                          <div key={cat.id} style={{ marginBottom: '30px', textAlign: 'left' }}>
+                              <h3 style={{
+                                  fontSize: '1.25rem', fontWeight: 'bold', color: 'white',
+                                  display: 'flex', alignItems: 'center', gap: '8px',
+                                  marginBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.05)',
+                                  paddingBottom: '8px'
+                              }}>
+                                  <span style={{ textShadow: `0 0 10px ${cat.color}60` }}>{cat.icon} {cat.name}</span>
+                                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
+                                      ({catGames.length} {catGames.length === 1 ? 'juego' : 'juegos'})
+                                  </span>
+                              </h3>
+                              <div style={{
+                                  display: 'grid',
+                                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                                  gap: '24px',
+                                  marginBottom: '20px'
+                              }}>
+                                  {catGames.map((game, index) => {
+                                      const gameId = game.to.replace('/', '');
+                                      const recordKey = `${gameId}_medium`;
+                                      const bestTime = records[recordKey]?.[0];
+
+                                      return (
+                                          <div key={index} style={{ position: 'relative' }}>
+                                              <GameCard
+                                                  to={game.to}
+                                                  icon={game.icon}
+                                                  title={game.title}
+                                                  description={game.description}
+                                              />
+                                              {bestTime && (
+                                                  <div style={{
+                                                      position: 'absolute',
+                                                      bottom: '12px',
+                                                      right: '16px',
+                                                      fontSize: '0.75rem',
+                                                      color: '#60a5fa',
+                                                      backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                                      padding: '2px 8px',
+                                                      borderRadius: '8px',
+                                                      border: '1px solid rgba(59, 130, 246, 0.2)',
+                                                      fontWeight: 'bold',
+                                                      pointerEvents: 'none'
+                                                  }}>
+                                                      ⏱️ Récord: {formatTime(bestTime)}
+                                                  </div>
+                                              )}
+                                          </div>
+                                      );
+                                  })}
+                              </div>
                           </div>
                       );
-                  })}
-              </div>
+                  });
+              })()}
           </div>
       </div>
 
